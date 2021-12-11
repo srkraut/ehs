@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "607131700019",
+    "project_id": "ehs-app-c5337",
+    "storage_bucket": "ehs-app-c5337.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607131700019:android:d2e791ff59b63e3abe4c46",
+        "android_client_info": {
+          "package_name": "com.example.ehs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "607131700019-q504grcvj3jor018r7l8elen8svh1mev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ehs",
+            "certificate_hash": "627b8ec2933eaec30007287d5d574fe813aede61"
+          }
+        },
+        {
+          "client_id": "607131700019-3png4chk17r9alkl76ifho49u7ith90t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJOf33Mygo032xRqiHV5A0l-Dt-tyCRSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "607131700019-3png4chk17r9alkl76ifho49u7ith90t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
