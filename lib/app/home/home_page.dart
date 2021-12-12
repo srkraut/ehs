@@ -7,6 +7,8 @@ import 'package:ehs/app/home/jobs/jobs_page.dart';
 import 'package:ehs/app/home/tab_item.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -58,7 +60,7 @@ class _HomePageState extends State<HomePage> {
           title: const Text('Home'),
           centerTitle: true,
         ),
-        drawer: Drawer(
+        drawer: const Drawer(
           backgroundColor: Colors.grey,
           child: AccountPage(),
         ),

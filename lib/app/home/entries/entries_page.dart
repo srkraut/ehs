@@ -16,6 +16,8 @@ final entriesTileModelStreamProvider =
 );
 
 class EntriesPage extends ConsumerWidget {
+  const EntriesPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final entriesTileModelStream = ref.watch(entriesTileModelStreamProvider);

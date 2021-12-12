@@ -7,7 +7,6 @@ import 'package:ehs/app/sign_in/sign_in_view_model.dart';
 import 'package:ehs/app/sign_in/sign_in_button.dart';
 import 'package:ehs/constants/keys.dart';
 import 'package:ehs/constants/strings.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ehs/routing/app_router.dart';
 

@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:ehs/app/home/drawer/my_families.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ehs/app/top_level_providers.dart';
-import 'package:ehs/common_widgets/avatar.dart';
 import 'package:alert_dialogs/alert_dialogs.dart';
 import 'package:ehs/constants/keys.dart';
 import 'package:ehs/constants/strings.dart';
@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:pedantic/pedantic.dart';
 
 class AccountPage extends ConsumerWidget {
+  const AccountPage({Key? key}) : super(key: key);
+
   Future<void> _signOut(BuildContext context, FirebaseAuth firebaseAuth) async {
     try {
       await firebaseAuth.signOut();
@@ -36,6 +38,15 @@ class AccountPage extends ConsumerWidget {
     if (didRequestSignOut == true) {
       await _signOut(context, firebaseAuth);
     }
+  }
+
+  Widget buildListTile(IconData? icon, String? title, Function()? onTap) {
+    return ListTile(
+      visualDensity: const VisualDensity(horizontal: 0, vertical: -1),
+      leading: Icon(icon, color: Colors.black),
+      title: Text(title!),
+      onTap: onTap,
+    );
   }
 
   @override
@@ -93,119 +104,59 @@ class AccountPage extends ConsumerWidget {
             color: Keys.pColor,
           ),
         ),
-        ListTile(
-          leading: const Icon(
-            Icons.home,
-            color: Colors.black,
+        buildListTile(Icons.home, 'Home', () => Navigator.pop(context)),
+        buildListTile(
+          Icons.family_restroom,
+          'My Families',
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const MyFamilies(),
+            ),
           ),
-          title: const Text('Home'),
-          onTap: () {
-            Navigator.pop(context);
-          },
         ),
-        ListTile(
-          leading: const Icon(
-            Icons.family_restroom,
-            color: Colors.black,
-          ),
-          title: const Text('My Families'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.local_atm,
-            color: Colors.black,
-          ),
-          title: const Text('Expenses'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.schedule,
-            color: Colors.black,
-          ),
-          title: const Text('Timesheets'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
+        buildListTile(
+            Icons.local_atm, 'Expenses', () => Navigator.pop(context)),
+        buildListTile(
+            Icons.schedule, 'Timesheets', () => Navigator.pop(context)),
         const Divider(
           height: 5,
           color: Colors.black,
         ),
-        ListTile(
-          leading: const Icon(
-            Icons.description,
-            color: Colors.black,
-          ),
-          title: const Text('Terms and Conditions'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.privacy_tip,
-            color: Colors.black,
-          ),
-          title: const Text('Privacy Policy'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.chat_bubble,
-            color: Colors.black,
-          ),
-          title: const Text('Feedback'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.info,
-            color: Colors.black,
-          ),
-          title: const Text('Support'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(
-            Icons.logout,
-            color: Colors.black,
-          ),
-          title: const Text('Logout'),
-          onTap: () => _confirmSignOut(context, firebaseAuth),
+        buildListTile(Icons.description, 'Terms and Condtion',
+            () => Navigator.pop(context)),
+        buildListTile(
+            Icons.privacy_tip, 'Privacy Policy', () => Navigator.pop(context)),
+        buildListTile(
+            Icons.chat_bubble, 'Feedback', () => Navigator.pop(context)),
+        buildListTile(Icons.info, 'Support', () => Navigator.pop(context)),
+        buildListTile(Icons.poll, 'Survey', () => Navigator.pop(context)),
+        buildListTile(
+          Icons.logout,
+          'Logout',
+          () => _confirmSignOut(context, firebaseAuth),
         ),
       ],
     );
   }
 
-  Widget _buildUserInfo(User user) {
-    return Column(
-      children: [
-        Avatar(
-          photoUrl: user.photoURL,
-          radius: 50,
-          borderColor: Colors.black54,
-          borderWidth: 2.0,
-        ),
-        const SizedBox(height: 8),
-        if (user.displayName != null)
-          Text(
-            user.displayName!,
-            style: const TextStyle(color: Colors.white),
-          ),
-        const SizedBox(height: 8),
-      ],
-    );
-  }
+//   Widget _buildUserInfo(User user) {
+//     return Column(
+//       children: [
+//         Avatar(
+//           photoUrl: user.photoURL,
+//           radius: 50,
+//           borderColor: Colors.black54,
+//           borderWidth: 2.0,
+//         ),
+//         const SizedBox(height: 8),
+//         if (user.displayName != null)
+//           Text(
+//             user.displayName!,
+//             style: const TextStyle(color: Colors.white),
+//           ),
+//         const SizedBox(height: 8),
+//       ],
+//     );
+//   }
 }

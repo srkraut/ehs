@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ehs/app/onboarding/onboarding_view_model.dart';
 
 class OnboardingPage extends ConsumerWidget {
+  const OnboardingPage({Key? key}) : super(key: key);
+
   Future<void> onGetStarted(BuildContext context, WidgetRef ref) async {
     final onboardingViewModel = ref.read(onboardingViewModelProvider.notifier);
     await onboardingViewModel.completeOnboarding();

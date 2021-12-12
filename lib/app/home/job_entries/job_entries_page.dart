@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:alert_dialogs/alert_dialogs.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:ehs/app/home/job_entries/entry_list_item.dart';

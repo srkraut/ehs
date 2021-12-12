@@ -42,10 +42,10 @@ class MyApp extends ConsumerWidget {
                 ref.watch(onboardingViewModelProvider);
             return didCompleteOnboarding
                 ? EmailPasswordSignInPage.withFirebaseAuth(firebaseAuth)
-                : OnboardingPage();
+                : const OnboardingPage();
           },
         ),
-        signedInBuilder: (_) => HomePage(),
+        signedInBuilder: (_) => const HomePage(),
       ),
       onGenerateRoute: (settings) =>
           AppRouter.onGenerateRoute(settings, firebaseAuth),

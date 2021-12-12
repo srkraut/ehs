@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ehs/services/shared_preferences_service.dart';
-import 'package:state_notifier/state_notifier.dart';
 
 final onboardingViewModelProvider =
     StateNotifierProvider<OnboardingViewModel, bool>((ref) {
