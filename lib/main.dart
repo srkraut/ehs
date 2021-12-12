@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ehs/services/shared_preferences_service.dart';
 
+import 'dependencies/email_password_sign_in_ui.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -37,7 +39,9 @@ class MyApp extends ConsumerWidget {
           builder: (context, ref, _) {
             final didCompleteOnboarding =
                 ref.watch(onboardingViewModelProvider);
-            return didCompleteOnboarding ? SignInPage() : OnboardingPage();
+            return didCompleteOnboarding
+                ? EmailPasswordSignInPage.withFirebaseAuth(firebaseAuth)
+                : OnboardingPage();
           },
         ),
         signedInBuilder: (_) => HomePage(),

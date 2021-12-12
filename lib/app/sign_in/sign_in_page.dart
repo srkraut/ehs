@@ -56,10 +56,10 @@ class SignInPageContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2.0,
-        title: Text(title),
-      ),
+      // appBar: AppBar(
+      //   elevation: 2.0,
+      //   title: Text(title),
+      // ),
       backgroundColor: Colors.grey[200],
       body: _buildSignIn(context),
     );

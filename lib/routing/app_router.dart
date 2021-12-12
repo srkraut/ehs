@@ -1,4 +1,4 @@
-import 'package:email_password_sign_in_ui/email_password_sign_in_ui.dart';
+import 'package:ehs/dependencies/email_password_sign_in_ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ehs/app/home/job_entries/entry_page.dart';
