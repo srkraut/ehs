@@ -1,10 +1,11 @@
 import 'package:ehs/constants/keys.dart';
 import 'package:flutter/material.dart';
-import 'package:ehs/app/home/account/account_page.dart';
 import 'package:ehs/app/home/cupertino_home_scaffold.dart';
 import 'package:ehs/app/home/entries/entries_page.dart';
 import 'package:ehs/app/home/jobs/jobs_page.dart';
 import 'package:ehs/app/home/tab_item.dart';
+
+import 'drawer/account_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

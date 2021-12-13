@@ -10,6 +10,8 @@ import 'package:ehs/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:pedantic/pedantic.dart';
 
+import 'expenses_page.dart';
+
 class AccountPage extends ConsumerWidget {
   const AccountPage({Key? key}) : super(key: key);
 
@@ -116,7 +118,12 @@ class AccountPage extends ConsumerWidget {
           ),
         ),
         buildListTile(
-            Icons.local_atm, 'Expenses', () => Navigator.pop(context)),
+            Icons.local_atm,
+            'Expenses',
+            () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => Expenses()))),
         buildListTile(
             Icons.schedule, 'Timesheets', () => Navigator.pop(context)),
         const Divider(
