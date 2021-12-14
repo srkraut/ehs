@@ -1,5 +1,6 @@
 import 'package:ehs/constants/keys.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class _ExpensesState extends State<Expenses> {
   TimeOfDay currentTime = TimeOfDay.now();
   DateTime currentDate = DateTime.now();
   bool _isTimeSelected = false;
+  bool _isDateSelected = false;
 
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? pickedTime = await showTimePicker(
@@ -30,28 +32,26 @@ class _ExpensesState extends State<Expenses> {
     }
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: currentDate,
+      firstDate: DateTime(2021, 1, 1),
+      lastDate: DateTime(2030, 1, 1),
+      helpText: "Choose Your Date",
+      confirmText: 'Choose Now',
+      cancelText: 'Later',
+    );
+    if (pickedDate != null && pickedDate != currentDate) {
+      setState(() {
+        currentDate = pickedDate;
+        _isDateSelected = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    String? dayValue;
-    List<String> days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
-    ];
-    String travelValue;
-    List<String> travels = [
-      "Airplane",
-      "Bus",
-      "Car",
-      "Train",
-      "Bicycle",
-      "Walk",
-      "Other"
-    ];
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -61,35 +61,27 @@ class _ExpensesState extends State<Expenses> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const Text('Please Select'),
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     const Icon(Icons.calendar_today),
                     const SizedBox(width: 14),
                     Container(
+                      padding: const EdgeInsets.only(top: 9, left: 10),
                       height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                       ),
-                      child: DropdownButton<String>(
-                        underline: Container(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            dayValue = newValue!;
-                          });
+                      child: InkWell(
+                        onTap: () {
+                          _selectDate(context);
                         },
-                        value: dayValue,
-                        //isExpanded: true,
-                        hint: Text('  Day'),
-                        icon: const Icon(Icons.arrow_drop_down),
-                        items: days.map((items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Text(items),
-                          );
-                        }).toList(),
+                        child: Text(_isDateSelected
+                            ? DateFormat('EEEEEE, M/d/y').format(currentDate)
+                            : 'Day'),
                       ),
                     ),
-                    // buildDropDownButton(Icons.arrow_drop_down, days),
                   ],
                 ),
                 const SizedBox(height: 14),
@@ -98,25 +90,19 @@ class _ExpensesState extends State<Expenses> {
                     const Icon(Icons.timer),
                     const SizedBox(width: 14),
                     Container(
+                      padding: const EdgeInsets.only(top: 9, left: 10),
                       height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                       ),
-                      child: Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              _selectTime(context);
-                            },
-                            child: Text(_isTimeSelected
-                                ? currentTime.format(context).toString()
-                                : '  Select your time'),
-                          ),
-                          const SizedBox(width: 14),
-                          const Icon(
-                            Icons.timer,
-                          ),
-                        ],
+                      child: InkWell(
+                        onTap: () {
+                          _selectTime(context);
+                        },
+                        child: Text(_isTimeSelected
+                            ? currentTime.format(context).toString()
+                            : 'Time'),
                       ),
                     ),
                   ],
@@ -127,27 +113,17 @@ class _ExpensesState extends State<Expenses> {
                     const Icon(Icons.car_rental),
                     const SizedBox(width: 14),
                     Container(
+                      padding: const EdgeInsets.only(top: 9, left: 10),
                       height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                       ),
-                      child: DropdownButton<String>(
-                        onChanged: (newValue) {
-                          setState(() {
-                            travelValue = newValue!;
-                          });
-                        },
-                        underline: Container(),
-                        value: dayValue,
-                        //isExpanded: true,
-                        hint: Text('  Method of Travel'),
-                        icon: const Icon(Icons.arrow_drop_down),
-                        items: travels.map((items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Text(items),
-                          );
-                        }).toList(),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Method of Travel',
+                        ),
                       ),
                     ),
                   ],
@@ -158,6 +134,7 @@ class _ExpensesState extends State<Expenses> {
                     const Icon(Icons.person),
                     const SizedBox(width: 14),
                     Container(
+                      padding: const EdgeInsets.only(top: 9, left: 10),
                       height: MediaQuery.of(context).size.height * 0.05,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -167,7 +144,7 @@ class _ExpensesState extends State<Expenses> {
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: '   Kilometers travelled'),
+                            hintText: 'Kilometers travelled'),
                       ),
                     ),
                   ],
@@ -178,6 +155,7 @@ class _ExpensesState extends State<Expenses> {
                     const Icon(Icons.money),
                     const SizedBox(width: 14),
                     Container(
+                      padding: const EdgeInsets.only(top: 9, left: 10),
                       height: MediaQuery.of(context).size.height * 0.05,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -187,7 +165,7 @@ class _ExpensesState extends State<Expenses> {
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: '   Cost of travel'),
+                            hintText: 'Cost of travel'),
                       ),
                     ),
                   ],
@@ -198,6 +176,7 @@ class _ExpensesState extends State<Expenses> {
                     const Icon(Icons.phone),
                     const SizedBox(width: 14),
                     Container(
+                      padding: const EdgeInsets.only(top: 9, left: 10),
                       height: MediaQuery.of(context).size.height * 0.05,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -207,7 +186,7 @@ class _ExpensesState extends State<Expenses> {
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: '   Phone Charges'),
+                            hintText: 'Phone Charges'),
                       ),
                     ),
                   ],
@@ -218,6 +197,7 @@ class _ExpensesState extends State<Expenses> {
                     const Icon(Icons.network_cell),
                     const SizedBox(width: 14),
                     Container(
+                      padding: const EdgeInsets.only(top: 9, left: 10),
                       height: MediaQuery.of(context).size.height * 0.05,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -227,13 +207,14 @@ class _ExpensesState extends State<Expenses> {
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: '   Internet Charged'),
+                            hintText: 'Internet Charged'),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 14),
                 Container(
+                  padding: const EdgeInsets.only(top: 9, left: 10),
                   height: MediaQuery.of(context).size.height * 0.07,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
@@ -242,7 +223,7 @@ class _ExpensesState extends State<Expenses> {
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: '   Any other expenses please specify'),
+                        hintText: 'Any other expenses please specify'),
                   ),
                 ),
                 const SizedBox(height: 14),
