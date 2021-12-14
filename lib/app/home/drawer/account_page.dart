@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ehs/app/home/drawer/my_families.dart';
+import 'package:ehs/app/home/drawer/survey_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ehs/app/top_level_providers.dart';
@@ -137,7 +138,16 @@ class AccountPage extends ConsumerWidget {
         buildListTile(
             Icons.chat_bubble, 'Feedback', () => Navigator.pop(context)),
         buildListTile(Icons.info, 'Support', () => Navigator.pop(context)),
-        buildListTile(Icons.poll, 'Survey', () => Navigator.pop(context)),
+        buildListTile(
+          Icons.poll,
+          'Survey',
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => Survey(),
+            ),
+          ),
+        ),
         buildListTile(
           Icons.logout,
           'Logout',

@@ -1,6 +1,8 @@
 import 'package:ehs/constants/keys.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({Key? key}) : super(key: key);
@@ -15,6 +17,48 @@ class _ExpensesState extends State<Expenses> {
   bool _isTimeSelected = false;
   bool _isDateSelected = false;
 
+  final travel = TextEditingController();
+  final distanceT = TextEditingController();
+  final cost = TextEditingController();
+  final phone = TextEditingController();
+  final internet = TextEditingController();
+  final other = TextEditingController();
+
+  String? selectedDate,
+      selectedTime,
+      selectedTravel,
+      distance,
+      travelCost,
+      phoneCharge,
+      internetCharge,
+      otherExpenses;
+
+  final firestoreInstance = FirebaseFirestore.instance;
+  var firebaseUser = FirebaseAuth.instance.currentUser;
+
+  void _onSubmit() {
+    firestoreInstance
+        .collection("users")
+        .doc(firebaseUser!.uid)
+        .collection("Expenses")
+        .add({
+      "selectedDate": DateFormat('EEEEEE, M/d/y').format(currentDate),
+      "selectedTime": currentTime.format(context).toString(),
+      "selectedTravel": selectedTravel,
+      "distance": distance,
+      "travelCost": travelCost,
+      "phoneCharge": phoneCharge,
+      "internetCharge": internetCharge,
+      "otherExpenses": otherExpenses,
+    });
+    distanceT.clear();
+    cost.clear();
+    phone.clear();
+    internet.clear();
+    other.clear();
+    travel.clear();
+  }
+
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
@@ -27,6 +71,7 @@ class _ExpensesState extends State<Expenses> {
     if (pickedTime != null && pickedTime != currentTime) {
       setState(() {
         currentTime = pickedTime;
+
         _isTimeSelected = true;
       });
     }
@@ -45,9 +90,22 @@ class _ExpensesState extends State<Expenses> {
     if (pickedDate != null && pickedDate != currentDate) {
       setState(() {
         currentDate = pickedDate;
+
         _isDateSelected = true;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    travel.dispose();
+    distanceT.dispose();
+    cost.dispose();
+    phone.dispose();
+    internet.dispose();
+    other.dispose();
   }
 
   @override
@@ -60,7 +118,10 @@ class _ExpensesState extends State<Expenses> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text('Please Select'),
+                const Text(
+                  'Please Select',
+                  style: TextStyle(fontSize: 20),
+                ),
                 const SizedBox(height: 14),
                 Row(
                   children: [
@@ -120,6 +181,10 @@ class _ExpensesState extends State<Expenses> {
                         color: Colors.grey[200],
                       ),
                       child: TextField(
+                        controller: travel,
+                        onSubmitted: (value) => setState(() {
+                          selectedTravel = value;
+                        }),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Method of Travel',
@@ -131,7 +196,7 @@ class _ExpensesState extends State<Expenses> {
                 const SizedBox(height: 14),
                 Row(
                   children: [
-                    const Icon(Icons.person),
+                    const Icon(Icons.add_road),
                     const SizedBox(width: 14),
                     Container(
                       padding: const EdgeInsets.only(top: 9, left: 10),
@@ -141,6 +206,10 @@ class _ExpensesState extends State<Expenses> {
                       ),
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: TextField(
+                        controller: distanceT,
+                        onSubmitted: (value) => setState(() {
+                          distance = value;
+                        }),
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                             border: InputBorder.none,
@@ -162,6 +231,10 @@ class _ExpensesState extends State<Expenses> {
                       ),
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: TextField(
+                        controller: cost,
+                        onSubmitted: (value) => setState(() {
+                          travelCost = value;
+                        }),
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                             border: InputBorder.none,
@@ -183,6 +256,10 @@ class _ExpensesState extends State<Expenses> {
                       ),
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: TextField(
+                        controller: phone,
+                        onSubmitted: (value) => setState(() {
+                          phoneCharge = value;
+                        }),
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                             border: InputBorder.none,
@@ -204,23 +281,30 @@ class _ExpensesState extends State<Expenses> {
                       ),
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: TextField(
+                        controller: internet,
+                        onSubmitted: (value) => setState(() {
+                          internetCharge = value;
+                        }),
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Internet Charged'),
+                            hintText: 'Internet Charges'),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 14),
                 Container(
-                  padding: const EdgeInsets.only(top: 9, left: 10),
+                  padding: const EdgeInsets.only(left: 10),
                   height: MediaQuery.of(context).size.height * 0.07,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                   ),
                   child: TextField(
-                    keyboardType: TextInputType.number,
+                    controller: other,
+                    onSubmitted: (value) => setState(() {
+                      otherExpenses = value;
+                    }),
                     decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Any other expenses please specify'),
@@ -231,8 +315,8 @@ class _ExpensesState extends State<Expenses> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Keys.pColor),
                   ),
-                  onPressed: null,
-                  child: Text('Submit'),
+                  onPressed: _onSubmit,
+                  child: const Text('Submit'),
                 ),
               ],
             ),

@@ -26,4 +26,8 @@ class Keys {
       900: Color(0xff000000), //100%
     },
   );
+  // Survey Page
+  static const String yes = 'Yes';
+  static const String no = 'No';
+  static const String noPlease = 'No, please give more details in Q5';
 }
