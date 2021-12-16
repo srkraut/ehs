@@ -185,7 +185,7 @@ class _ExpensesState extends State<Expenses> {
                         onSubmitted: (value) => setState(() {
                           selectedTravel = value;
                         }),
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Method of Travel',
                         ),

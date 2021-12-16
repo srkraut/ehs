@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehs/constants/keys.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -79,10 +81,42 @@ class _SurveyState extends State<Survey> {
     if (pickedDate != null && pickedDate != currentDate) {
       setState(() {
         currentDate = pickedDate;
-
         _isDateSelected = true;
       });
     }
+  }
+
+  final firestoreInstance = FirebaseFirestore.instance;
+  var firebaseUser = FirebaseAuth.instance.currentUser;
+
+  void _onSubmit() {
+    firestoreInstance
+        .collection("users")
+        .doc(firebaseUser!.uid)
+        .collection("Survey")
+        .add({
+      "q1": DateFormat('EEEEEE, M/d/y').format(currentDate),
+      "q2": volunteerController.text,
+      "q3": nameController.text,
+      "q4": _value.toString(),
+      "q5": q5COntroller.text,
+      "q6": Q6,
+      "q7": _value2.toString(),
+      "q8": _value3.toString(),
+      "q9": _value4.toString(),
+      "q10": Q10,
+      "q11": _value5.toString(),
+      "q12": q12COntroller.text,
+      "q13": _value6.toString(),
+      "q14": q14COntroller.text,
+      "q15": _value7.toString(),
+    });
+    // distanceT.clear();
+    // cost.clear();
+    // phone.clear();
+    // internet.clear();
+    // other.clear();
+    // travel.clear();
   }
 
   @override
@@ -524,7 +558,7 @@ class _SurveyState extends State<Survey> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Keys.pColor),
                   ),
-                  onPressed: null,
+                  onPressed: _onSubmit,
                   child: const Text('Submit'),
                 ),
               ],
