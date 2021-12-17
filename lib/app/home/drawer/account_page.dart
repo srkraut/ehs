@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:pedantic/pedantic.dart';
 
 import 'expenses_page.dart';
+import 'timesheets_page.dart';
 
 class AccountPage extends ConsumerWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -111,22 +112,15 @@ class AccountPage extends ConsumerWidget {
         buildListTile(
           Icons.family_restroom,
           'My Families',
-          () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => const MyFamilies(),
-            ),
-          ),
+          () => MyFamilies.show(context),
         ),
         buildListTile(
-            Icons.local_atm,
-            'Expenses',
-            () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => Expenses()))),
+          Icons.local_atm,
+          'Expenses',
+          () => Expenses.show(context),
+        ),
         buildListTile(
-            Icons.schedule, 'Timesheets', () => Navigator.pop(context)),
+            Icons.schedule, 'Timesheets', () => TimeSheet.show(context)),
         const Divider(
           height: 5,
           color: Colors.black,
@@ -141,12 +135,7 @@ class AccountPage extends ConsumerWidget {
         buildListTile(
           Icons.poll,
           'Survey',
-          () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => Survey(),
-            ),
-          ),
+          () => Survey.show(context),
         ),
         buildListTile(
           Icons.logout,

@@ -1,11 +1,21 @@
 import 'package:ehs/constants/keys.dart';
+import 'package:ehs/routing/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../home_page.dart';
+import 'account_page.dart';
+
 class Expenses extends StatefulWidget {
   const Expenses({Key? key}) : super(key: key);
+  static Future<void> show(
+    BuildContext context,
+  ) async {
+    await Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+        AppRoutes.expensesPage, (Route<dynamic> route) => false);
+  }
 
   @override
   State<Expenses> createState() => _ExpensesState();
@@ -51,12 +61,15 @@ class _ExpensesState extends State<Expenses> {
       "internetCharge": internetCharge,
       "otherExpenses": otherExpenses,
     });
-    distanceT.clear();
-    cost.clear();
-    phone.clear();
-    internet.clear();
-    other.clear();
-    travel.clear();
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Form Submitted"),
+      duration: Duration(milliseconds: 500),
+    ));
+
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => const HomePage()),
+        (route) => false);
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -112,6 +125,13 @@ class _ExpensesState extends State<Expenses> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: const Drawer(
+          backgroundColor: Colors.grey,
+          child: AccountPage(),
+        ),
+        appBar: AppBar(
+          title: const Text('Expenses'),
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(18.0),

@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehs/constants/keys.dart';
+import 'package:ehs/routing/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../home_page.dart';
+import 'account_page.dart';
 
 const String yes = 'Yes';
 const String no = 'No';
@@ -29,6 +33,13 @@ enum Survey15 { yes, no, unsure }
 
 class Survey extends StatefulWidget {
   Survey({Key? key}) : super(key: key);
+
+  static Future<void> show(
+    BuildContext context,
+  ) async {
+    await Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+        AppRoutes.surveyPage, (Route<dynamic> route) => false);
+  }
 
   @override
   State<Survey> createState() => _SurveyState();
@@ -111,18 +122,28 @@ class _SurveyState extends State<Survey> {
       "q14": q14COntroller.text,
       "q15": _value7.toString(),
     });
-    // distanceT.clear();
-    // cost.clear();
-    // phone.clear();
-    // internet.clear();
-    // other.clear();
-    // travel.clear();
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Form Submitted"),
+      duration: Duration(milliseconds: 500),
+    ));
+    // HomePage.show(context);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => const HomePage()),
+        (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: const Drawer(
+          backgroundColor: Colors.grey,
+          child: AccountPage(),
+        ),
+        appBar: AppBar(
+          title: const Text('Survey'),
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(18.0),
@@ -168,6 +189,7 @@ class _SurveyState extends State<Survey> {
                     color: Colors.grey[200],
                   ),
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     controller: volunteerController,
                     onSubmitted: (value) => setState(() {
                       volunteer_no = value;
