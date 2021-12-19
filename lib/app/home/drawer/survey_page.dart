@@ -99,6 +99,7 @@ class _SurveyState extends State<Survey> {
 
   final firestoreInstance = FirebaseFirestore.instance;
   var firebaseUser = FirebaseAuth.instance.currentUser;
+  final FocusScopeNode _node = FocusScopeNode();
 
   void _onSubmit() {
     firestoreInstance
@@ -131,6 +132,17 @@ class _SurveyState extends State<Survey> {
         context,
         MaterialPageRoute(builder: (BuildContext context) => const HomePage()),
         (route) => false);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    nameController.dispose();
+    volunteerController.dispose();
+    q5COntroller.dispose();
+    q12COntroller.dispose();
+    q14COntroller.dispose();
   }
 
   @override

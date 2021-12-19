@@ -15,6 +15,7 @@ class EmailAndPasswordValidators {
 class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
   EmailPasswordSignInModel({
     required this.firebaseAuth,
+    this.name = '',
     this.email = '',
     this.password = '',
     this.formType = EmailPasswordSignInFormType.signIn,
@@ -23,6 +24,12 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
   });
   final FirebaseAuth firebaseAuth;
 
+  // FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(authResult.user.uid)
+  //         .set({'user': user, 'email': email});
+
+  String name;
   String email;
   String password;
   EmailPasswordSignInFormType formType;
@@ -42,8 +49,12 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
               EmailAuthProvider.credential(email: email, password: password));
           break;
         case EmailPasswordSignInFormType.register:
-          await firebaseAuth.createUserWithEmailAndPassword(
-              email: email, password: password);
+          await firebaseAuth
+              .createUserWithEmailAndPassword(email: email, password: password)
+              .then((_) => FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(firebaseAuth.currentUser?.uid)
+                  .set({'user': name}));
           break;
         case EmailPasswordSignInFormType.forgotPassword:
           await firebaseAuth.sendPasswordResetEmail(email: email);

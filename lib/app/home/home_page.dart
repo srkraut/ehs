@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehs/constants/keys.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ehs/app/home/cupertino_home_scaffold.dart';
 import 'package:ehs/app/home/entries/entries_page.dart';
@@ -39,10 +41,28 @@ class _HomePageState extends State<HomePage> {
   //     setState(() => _currentTab = tabItem);
   //   }
   // }
-  var user = 'John Doe';
+
+  final firestoreInstance = FirebaseFirestore.instance;
+  var firebaseUser = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+    var user;
+    getUser() async {
+      await firestoreInstance
+          .collection("users")
+          .doc(firebaseUser!.uid)
+          .get()
+          .then((value) => user = value.data()!["user"]);
+    }
+
+    // var userName =
+    //     firestoreInstance.collection("users").doc(firebaseUser!.uid).get();
+    // var name = userName.then((value) => value.data()!["user"]);
+    // .then((value) => value.data()!["user"]);
+
+    // print(userName);
     // return WillPopScope(
     //   onWillPop: () async =>
     //       !(await navigatorKeys[_currentTab]!.currentState?.maybePop() ??

@@ -54,12 +54,12 @@ class _ExpensesState extends State<Expenses> {
         .add({
       "selectedDate": DateFormat('EEEEEE, M/d/y').format(currentDate),
       "selectedTime": currentTime.format(context).toString(),
-      "selectedTravel": selectedTravel,
-      "distance": distance,
-      "travelCost": travelCost,
-      "phoneCharge": phoneCharge,
-      "internetCharge": internetCharge,
-      "otherExpenses": otherExpenses,
+      "selectedTravel": travel.text,
+      "distance": distanceT.text,
+      "travelCost": cost.text,
+      "phoneCharge": phone.text,
+      "internetCharge": internet.text,
+      "otherExpenses": other.text,
     });
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text("Form Submitted"),
@@ -322,6 +322,7 @@ class _ExpensesState extends State<Expenses> {
                   ),
                   child: TextField(
                     controller: other,
+                    keyboardType: TextInputType.multiline,
                     onSubmitted: (value) => setState(() {
                       otherExpenses = value;
                     }),

@@ -39,6 +39,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
   void dispose() {
     model.dispose();
     _node.dispose();
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -211,12 +212,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   elevation: 2.0,
-      //   title: Text(model.title),
-      // ),
       backgroundColor: Colors.grey[200],
-
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
