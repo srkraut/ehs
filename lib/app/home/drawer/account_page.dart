@@ -11,6 +11,7 @@ import 'package:ehs/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:pedantic/pedantic.dart';
 
+import '../home_page.dart';
 import 'expenses_page.dart';
 import 'timesheets_page.dart';
 
@@ -108,7 +109,7 @@ class AccountPage extends ConsumerWidget {
             color: Keys.pColor,
           ),
         ),
-        buildListTile(Icons.home, 'Home', () => Navigator.pop(context)),
+        buildListTile(Icons.home, 'Home', () => HomePage.show(context)),
         buildListTile(
           Icons.family_restroom,
           'My Families',
@@ -120,7 +121,8 @@ class AccountPage extends ConsumerWidget {
           () => Expenses.show(context),
         ),
         buildListTile(
-            Icons.schedule, 'Timesheets', () => TimeSheet.show(context)),
+            Icons.schedule, 'Timesheet', () => TimeSheet.show(context),
+        ),
         const Divider(
           height: 5,
           color: Colors.black,

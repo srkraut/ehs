@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehs/constants/keys.dart';
+import 'package:ehs/routing/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ehs/app/home/cupertino_home_scaffold.dart';
@@ -11,6 +12,12 @@ import 'drawer/account_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+  static Future<void> show(BuildContext context) async {
+    await Navigator.of(context, rootNavigator: true).pushNamed(
+      AppRoutes.homePage,
+    );
+  }
+
 
   @override
   _HomePageState createState() => _HomePageState();

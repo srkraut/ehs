@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:ehs/app/home/drawer/expenses_page.dart';
 import 'package:ehs/app/home/drawer/my_families.dart';
 import 'package:ehs/app/home/drawer/survey_page.dart';
@@ -19,7 +21,7 @@ class AppRoutes {
   static const expensesPage = '/expenses-page';
   static const timesheets = '/timesheet-page';
   static const surveyPage = '/survey-page';
-  static const homePage = '/';
+  static const homePage = '/home-page';
 }
 
 class AppRouter {
@@ -75,7 +77,7 @@ class AppRouter {
         );
       case AppRoutes.timesheets:
         return MaterialPageRoute<dynamic>(
-          builder: (context) => const TimeSheet(),
+          builder: (_) => const TimeSheet(),
           settings: settings,
           fullscreenDialog: true,
         );
