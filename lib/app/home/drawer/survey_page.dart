@@ -8,35 +8,12 @@ import 'package:intl/intl.dart';
 import '../home_page.dart';
 import 'account_page.dart';
 
-const String yes = 'Yes';
-const String no = 'No';
-const String noPlease = 'No, please give more details in Q5';
-const String hrs = '0-1 Hours';
-const String hrs1 = '1-2 Hours';
-const String hrs2 = '2+ Hours';
-const String none = 'None';
-const String local =
-    'Local Community services(i.e:playgroups,library,craft group)';
-const String additional =
-    'Additional allied health services(e.g:CPS, SFSK, CAHMS)';
-const String gp = 'Family\'s GP';
-const String other = 'Other';
-const String unsure = 'Unsure';
-
-enum Survey4 { yes, no, noPlease }
-enum Survey7 { hrs, hrs1, hrs2, none }
-enum Survey8 { local, additional, gp, other, none }
-enum Survey9 { yes, no }
-enum Survey11 { yes, no }
-enum Survey13 { yes, no }
-enum Survey15 { yes, no, unsure }
-
 class Survey extends StatefulWidget {
   Survey({Key? key}) : super(key: key);
 
   static Future<void> show(
-    BuildContext context,
-  ) async {
+      BuildContext context,
+      ) async {
     await Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
         AppRoutes.surveyPage, (Route<dynamic> route) => false);
   }
@@ -54,14 +31,6 @@ class _SurveyState extends State<Survey> {
   final q12COntroller = TextEditingController();
   final q14COntroller = TextEditingController();
 
-  Survey4 _value = Survey4.yes;
-  Survey7 _value2 = Survey7.hrs;
-  Survey8 _value3 = Survey8.local;
-  Survey9 _value4 = Survey9.yes;
-  Survey11 _value5 = Survey11.yes;
-  Survey13 _value6 = Survey13.yes;
-  Survey15 _value7 = Survey15.yes;
-
   String? date, volunteer_no, name, q5, q12, q14;
 
   List<Map> Q6 = [
@@ -78,6 +47,48 @@ class _SurveyState extends State<Survey> {
     {'value': 'Outline of contact', 'label': false},
     {'value': 'Have not submitted Case notes', 'label': false},
   ];
+
+  static const valuesQ4 = <String>[
+    'Yes',
+    'No',
+    'No, please give more details in Q5',
+  ];
+  static const valuesQ7 = <String>[
+    '0-1 Hours',
+    '1-2 Hours',
+    '2+ Hours',
+    'None',
+  ];
+  static const valuesQ8 = <String>[
+    'Local Community services(i.e:playgroups,library,craft group)',
+    'Additional allied health services(e.g:CPS, SFSK, CAHMS)',
+    'Family\'s GP',
+    'Other',
+  ];
+  static const valuesQ9 = <String>[
+    'Yes',
+    'No',
+  ];
+  static const valuesQ11 = <String>[
+    'Yes',
+    'No',
+  ];
+  static const valuesQ13 = <String>[
+    'Yes',
+    'No',
+  ];
+  static const valuesQ15 = <String>[
+    'Yes',
+    'No',
+    'Unsure',
+  ];
+  String selectedValueQ4 = valuesQ4.first;
+  String selectedValueQ7 = valuesQ7.first;
+  String selectedValueQ8 = valuesQ8.first;
+  String selectedValueQ9 = valuesQ9.first;
+  String selectedValueQ11 = valuesQ11.first;
+  String selectedValueQ13 = valuesQ13.first;
+  String selectedValueQ15 = valuesQ15.first;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -99,7 +110,7 @@ class _SurveyState extends State<Survey> {
 
   final firestoreInstance = FirebaseFirestore.instance;
   var firebaseUser = FirebaseAuth.instance.currentUser;
-  final FocusScopeNode _node = FocusScopeNode();
+  // final FocusScopeNode _node = FocusScopeNode();
 
   void _onSubmit() {
     firestoreInstance
@@ -110,19 +121,20 @@ class _SurveyState extends State<Survey> {
       "q1": DateFormat('EEEEEE, M/d/y').format(currentDate),
       "q2": volunteerController.text,
       "q3": nameController.text,
-      "q4": _value.toString(),
+      "q4": selectedValueQ4,
       "q5": q5COntroller.text,
       "q6": Q6,
-      "q7": _value2.toString(),
-      "q8": _value3.toString(),
-      "q9": _value4.toString(),
+      "q7": selectedValueQ7,
+      "q8": selectedValueQ8,
+      "q9": selectedValueQ9,
       "q10": Q10,
-      "q11": _value5.toString(),
+      "q11": selectedValueQ11,
       "q12": q12COntroller.text,
-      "q13": _value6.toString(),
+      "q13": selectedValueQ13,
       "q14": q14COntroller.text,
-      "q15": _value7.toString(),
+      "q15": selectedValueQ15,
     });
+
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text("Form Submitted"),
       duration: Duration(milliseconds: 500),
@@ -130,8 +142,8 @@ class _SurveyState extends State<Survey> {
     // HomePage.show(context);
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (BuildContext context) => const HomePage()),
-        (route) => false);
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()),
+            (route) => false);
   }
 
   @override
@@ -149,7 +161,7 @@ class _SurveyState extends State<Survey> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer: const Drawer(
+        drawer:  Drawer(
           backgroundColor: Colors.grey,
           child: AccountPage(),
         ),
@@ -237,39 +249,24 @@ class _SurveyState extends State<Survey> {
                 const Text(
                     '4. Have you been in contact with your family in the past 2 weeks?'),
                 const SizedBox(height: 8),
-                ListTile(
-                    visualDensity:
+                Column(
+                  children: valuesQ4.map(
+                        (value) {
+                      final selected = selectedValueQ4 == value;
+
+                      return RadioListTile<String>(
+                        visualDensity:
                         const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(yes),
-                    leading: Radio(
-                      value: Survey4.yes,
-                      groupValue: _value,
-                      onChanged: (Survey4? value) => setState(() {
-                        _value = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(no),
-                    leading: Radio(
-                      value: Survey4.no,
-                      groupValue: _value,
-                      onChanged: (Survey4? value) => setState(() {
-                        _value = value!;
-                      }),
-                    )),
-                ListTile(
-                  visualDensity:
-                      const VisualDensity(horizontal: 0, vertical: -4),
-                  title: const Text(noPlease),
-                  leading: Radio(
-                    value: Survey4.noPlease,
-                    groupValue: _value,
-                    onChanged: (Survey4? value) => setState(() {
-                      _value = value!;
-                    }),
-                  ),
+                        value: value,
+                        groupValue: selectedValueQ4,
+                        title: Text(
+                          value,
+                        ),
+                        onChanged: (value) =>
+                            setState(() => selectedValueQ4 = value!),
+                      );
+                    },
+                  ).toList(),
                 ),
                 const SizedBox(height: 14),
                 const Text(
@@ -301,181 +298,123 @@ class _SurveyState extends State<Survey> {
                 const SizedBox(height: 6),
                 Column(
                     children: Q6.map((q) {
-                  return CheckboxListTile(
-                      visualDensity:
+                      return CheckboxListTile(
+                          visualDensity:
                           const VisualDensity(horizontal: 0, vertical: -4),
-                      value: q["label"],
-                      title: Text(q["value"]),
-                      onChanged: (newValue) {
-                        setState(() {
-                          q["label"] = newValue;
-                        });
-                      });
-                }).toList()),
+                          value: q["label"],
+                          title: Text(q["value"]),
+                          onChanged: (newValue) {
+                            setState(() {
+                              q["label"] = newValue;
+                            });
+                          });
+                    }).toList()),
                 const SizedBox(height: 14),
                 const Text('7. How many hours did you spend with the family?'),
                 const SizedBox(height: 6),
-                ListTile(
-                    visualDensity:
+                Column(
+                  children: valuesQ7.map(
+                        (value) {
+                      final selected = selectedValueQ7 == value;
+
+                      return RadioListTile<String>(
+                        visualDensity:
                         const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(hrs),
-                    leading: Radio(
-                      value: Survey7.hrs,
-                      groupValue: _value2,
-                      onChanged: (Survey7? value) => setState(() {
-                        _value2 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(hrs1),
-                    leading: Radio(
-                      value: Survey7.hrs1,
-                      groupValue: _value2,
-                      onChanged: (Survey7? value) => setState(() {
-                        _value2 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(hrs2),
-                    leading: Radio(
-                      value: Survey7.hrs2,
-                      groupValue: _value2,
-                      onChanged: (Survey7? value) => setState(() {
-                        _value2 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(none),
-                    leading: Radio(
-                      value: Survey7.none,
-                      groupValue: _value2,
-                      onChanged: (Survey7? value) => setState(() {
-                        _value2 = value!;
-                      }),
-                    )),
+                        value: value,
+                        groupValue: selectedValueQ7,
+                        title: Text(
+                          value,
+                        ),
+                        onChanged: (value) =>
+                            setState(() => selectedValueQ7 = value!),
+                      );
+                    },
+                  ).toList(),
+                ),
                 const SizedBox(height: 14),
                 const Text(
                     '8. Have you had to contact any of the following since our last check in?'),
                 const SizedBox(height: 6),
-                ListTile(
-                    visualDensity:
+                Column(
+                  children: valuesQ8.map(
+                        (value) {
+                      final selected = selectedValueQ8 == value;
+
+                      return RadioListTile<String>(
+                        visualDensity:
                         const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(local),
-                    leading: Radio(
-                      value: Survey8.local,
-                      groupValue: _value3,
-                      onChanged: (Survey8? value) => setState(() {
-                        _value3 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(additional),
-                    leading: Radio(
-                      value: Survey8.additional,
-                      groupValue: _value3,
-                      onChanged: (Survey8? value) => setState(() {
-                        _value3 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(gp),
-                    leading: Radio(
-                      value: Survey8.gp,
-                      groupValue: _value3,
-                      onChanged: (Survey8? value) => setState(() {
-                        _value3 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(other),
-                    leading: Radio(
-                      value: Survey8.other,
-                      groupValue: _value3,
-                      onChanged: (Survey8? value) => setState(() {
-                        _value3 = value!;
-                      }),
-                    )),
+                        value: value,
+                        groupValue: selectedValueQ8,
+                        title: Text(
+                          value,
+                        ),
+                        onChanged: (value) =>
+                            setState(() => selectedValueQ8 = value!),
+                      );
+                    },
+                  ).toList(),
+                ),
                 const SizedBox(height: 14),
                 const Text(
                     '9. Do you have a case plan in place for the family?'),
                 const SizedBox(height: 6),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(yes),
-                    leading: Radio(
-                      value: Survey9.yes,
-                      groupValue: _value4,
-                      onChanged: (Survey9? value) => setState(() {
-                        _value4 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(no),
-                    leading: Radio(
-                      value: Survey9.no,
-                      groupValue: _value4,
-                      onChanged: (Survey9? value) => setState(() {
-                        _value4 = value!;
-                      }),
-                    )),
+                Column(
+                  children: valuesQ9.map(
+                        (value) {
+                      final selected = selectedValueQ9 == value;
+
+                      return RadioListTile<String>(
+                        value: value,
+                        groupValue: selectedValueQ9,
+                        title: Text(
+                          value,
+                        ),
+                        onChanged: (value) =>
+                            setState(() => selectedValueQ9 = value!),
+                      );
+                    },
+                  ).toList(),
+                ),
                 const SizedBox(height: 14),
                 const Text(
                     '10. Have you submitted case notes for the last two weeks detailing any of the following?'),
                 const SizedBox(height: 6),
                 Column(
                     children: Q10.map((q) {
-                  return CheckboxListTile(
-                      visualDensity:
+                      return CheckboxListTile(
+                          visualDensity:
                           const VisualDensity(horizontal: 0, vertical: -4),
-                      value: q["label"],
-                      title: Text(q["value"]),
-                      onChanged: (newValue) {
-                        setState(() {
-                          q["label"] = newValue;
-                        });
-                      });
-                }).toList()),
+                          value: q["label"],
+                          title: Text(q["value"]),
+                          onChanged: (newValue) {
+                            setState(() {
+                              q["label"] = newValue;
+                            });
+                          });
+                    }).toList()),
                 const SizedBox(height: 14),
                 const Text(
                     '11. Are you confident that the family are working towards the goals set out in you case plans?'),
                 const SizedBox(height: 6),
-                ListTile(
-                    visualDensity:
+                Column(
+                  children: valuesQ11.map(
+                        (value) {
+                      final selected = selectedValueQ11 == value;
+
+                      return RadioListTile<String>(
+                        visualDensity:
                         const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(yes),
-                    leading: Radio(
-                      value: Survey11.yes,
-                      groupValue: _value5,
-                      onChanged: (Survey11? value) => setState(() {
-                        _value5 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(no),
-                    leading: Radio(
-                      value: Survey11.no,
-                      groupValue: _value5,
-                      onChanged: (Survey11? value) => setState(() {
-                        _value5 = value!;
-                      }),
-                    )),
+                        value: value,
+                        groupValue: selectedValueQ11,
+                        title: Text(
+                          value,
+                        ),
+                        onChanged: (value) =>
+                            setState(() => selectedValueQ11 = value!),
+                      );
+                    },
+                  ).toList(),
+                ),
                 const SizedBox(height: 14),
                 const Text(
                     '12. If you answered no to Question 11, please explain in more detail your concerns.'),
@@ -504,28 +443,25 @@ class _SurveyState extends State<Survey> {
                 const Text(
                     '13. Have any issues asrisen since our last check in?'),
                 const SizedBox(height: 6),
-                ListTile(
-                    visualDensity:
+                Column(
+                  children: valuesQ13.map(
+                        (value) {
+                      final selected = selectedValueQ8 == value;
+
+                      return RadioListTile<String>(
+                        visualDensity:
                         const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(yes),
-                    leading: Radio(
-                      value: Survey13.yes,
-                      groupValue: _value6,
-                      onChanged: (Survey13? value) => setState(() {
-                        _value6 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(no),
-                    leading: Radio(
-                      value: Survey13.no,
-                      groupValue: _value6,
-                      onChanged: (Survey13? value) => setState(() {
-                        _value6 = value!;
-                      }),
-                    )),
+                        value: value,
+                        groupValue: selectedValueQ13,
+                        title: Text(
+                          value,
+                        ),
+                        onChanged: (value) =>
+                            setState(() => selectedValueQ13 = value!),
+                      );
+                    },
+                  ).toList(),
+                ),
                 const SizedBox(height: 14),
                 const Text(
                     '14. Please decsribe in more detail any concers or issues that you are currently dealing with.'),
@@ -554,39 +490,25 @@ class _SurveyState extends State<Survey> {
                 const Text(
                     '15. Do you have any additional support in the coming weeks to ensure the family are keeping on track with their objectives?'),
                 const SizedBox(height: 6),
-                ListTile(
-                    visualDensity:
+                Column(
+                  children: valuesQ15.map(
+                        (value) {
+                      final selected = selectedValueQ15 == value;
+
+                      return RadioListTile<String>(
+                        visualDensity:
                         const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(yes),
-                    leading: Radio(
-                      value: Survey15.yes,
-                      groupValue: _value7,
-                      onChanged: (Survey15? value) => setState(() {
-                        _value7 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(no),
-                    leading: Radio(
-                      value: Survey15.no,
-                      groupValue: _value7,
-                      onChanged: (Survey15? value) => setState(() {
-                        _value7 = value!;
-                      }),
-                    )),
-                ListTile(
-                    visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
-                    title: const Text(unsure),
-                    leading: Radio(
-                      value: Survey15.unsure,
-                      groupValue: _value7,
-                      onChanged: (Survey15? value) => setState(() {
-                        _value7 = value!;
-                      }),
-                    )),
+                        value: value,
+                        groupValue: selectedValueQ15,
+                        title: Text(
+                          value,
+                        ),
+                        onChanged: (value) =>
+                            setState(() => selectedValueQ15 = value!),
+                      );
+                    },
+                  ).toList(),
+                ),
                 const SizedBox(height: 14),
                 ElevatedButton(
                   style: ButtonStyle(

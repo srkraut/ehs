@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:ehs/app/home/drawer/expenses_page.dart';
 import 'package:ehs/app/home/drawer/my_families.dart';
@@ -59,7 +58,7 @@ class AppRouter {
         );
       case AppRoutes.homePage:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => const HomePage(),
+          builder: (_) => HomePage(),
           settings: settings,
           fullscreenDialog: true,
         );

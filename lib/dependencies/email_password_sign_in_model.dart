@@ -1,3 +1,4 @@
+
 part of email_password_sign_in_ui;
 
 enum EmailPasswordSignInFormType { signIn, register, forgotPassword }
@@ -13,6 +14,7 @@ class EmailAndPasswordValidators {
 }
 
 class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
+
   EmailPasswordSignInModel({
     required this.firebaseAuth,
     this.name = '',
@@ -50,11 +52,12 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
           break;
         case EmailPasswordSignInFormType.register:
           await firebaseAuth
-              .createUserWithEmailAndPassword(email: email, password: password)
-              .then((_) => FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(firebaseAuth.currentUser?.uid)
-                  .set({'user': name}));
+              .createUserWithEmailAndPassword(email: email, password: password,);
+              // .then((_) =>
+          // FirebaseFirestore.instance
+          //         .collection("users")
+          //         .doc(firebaseAuth.currentUser?.uid)
+          //         .set({'user': name}));
           break;
         case EmailPasswordSignInFormType.forgotPassword:
           await firebaseAuth.sendPasswordResetEmail(email: email);
@@ -71,9 +74,11 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
   void updateEmail(String email) => updateWith(email: email);
 
   void updatePassword(String password) => updateWith(password: password);
+   void updateName(String name) => updateWith(name: name);
 
   void updateFormType(EmailPasswordSignInFormType formType) {
     updateWith(
+      name: '',
       email: '',
       password: '',
       formType: formType,
@@ -83,12 +88,14 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
   }
 
   void updateWith({
+    String? name,
     String? email,
     String? password,
     EmailPasswordSignInFormType? formType,
     bool? isLoading,
     bool? submitted,
   }) {
+    this.name = name?? this.name;
     this.email = email ?? this.email;
     this.password = password ?? this.password;
     this.formType = formType ?? this.formType;
@@ -192,6 +199,6 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
 
   @override
   String toString() {
-    return 'email: $email, password: $password, formType: $formType, isLoading: $isLoading, submitted: $submitted';
+    return 'email: $email,name: $name password: $password, formType: $formType, isLoading: $isLoading, submitted: $submitted';
   }
 }

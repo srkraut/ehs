@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehs/app/home/drawer/my_families.dart';
 import 'package:ehs/app/home/drawer/survey_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +17,7 @@ import 'expenses_page.dart';
 import 'timesheets_page.dart';
 
 class AccountPage extends ConsumerWidget {
-  const AccountPage({Key? key}) : super(key: key);
+  AccountPage({Key? key}) : super(key: key);
 
   Future<void> _signOut(BuildContext context, FirebaseAuth firebaseAuth) async {
     try {
@@ -44,6 +45,7 @@ class AccountPage extends ConsumerWidget {
       await _signOut(context, firebaseAuth);
     }
   }
+  late String Name;
 
   Widget buildListTile(IconData? icon, String? title, Function()? onTap) {
     return ListTile(
@@ -59,29 +61,6 @@ class AccountPage extends ConsumerWidget {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
     final user = firebaseAuth.currentUser!;
     var height = MediaQuery.of(context).size.height;
-    var name = 'John Doe';
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: const Text(Strings.accountPage),
-    //     actions: <Widget>[
-    //       TextButton(
-    //         key: const Key(Keys.logout),
-    //         child: const Text(
-    //           Strings.logout,
-    //           style: TextStyle(
-    //             fontSize: 18.0,
-    //             color: Colors.white,
-    //           ),
-    //         ),
-    //         onPressed: () => _confirmSignOut(context, firebaseAuth),
-    //       ),
-    //     ],
-    //     bottom: PreferredSize(
-    //       preferredSize: const Size.fromHeight(130.0),
-    //       child: _buildUserInfo(user),
-    //     ),
-    //   ),
-    // );
 
     return ListView(
       children: <Widget>[
@@ -90,18 +69,37 @@ class AccountPage extends ConsumerWidget {
             children: [
               CircleAvatar(
                 radius: height * 0.06,
-                child: Text(
-                  name.substring(0, 1),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: height * 0.04,
-                  ),
+                child:FutureBuilder(
+                  future: _name(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done)
+                      return CircularProgressIndicator();
+                    return
+                      Text("$Name".substring(0,1),style: TextStyle(
+                        color: Colors.white,
+                        fontSize: height * 0.04,
+                      ),);
+                  },
                 ),
+                // Text(
+                //   Name.substring(0, 1),
+                //   style: TextStyle(
+                //     color: Colors.white,
+                //     fontSize: height * 0.04,
+                //   ),
+                // ),
                 backgroundColor: Colors.red.shade400,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0),
-                child: Text(name),
+                child: FutureBuilder(
+                  future: _name(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done)
+                      return CircularProgressIndicator();
+                    return Text("$Name");
+                  },
+                ),
               ),
             ],
           ),
@@ -147,24 +145,19 @@ class AccountPage extends ConsumerWidget {
       ],
     );
   }
-
-//   Widget _buildUserInfo(User user) {
-//     return Column(
-//       children: [
-//         Avatar(
-//           photoUrl: user.photoURL,
-//           radius: 50,
-//           borderColor: Colors.black54,
-//           borderWidth: 2.0,
-//         ),
-//         const SizedBox(height: 8),
-//         if (user.displayName != null)
-//           Text(
-//             user.displayName!,
-//             style: const TextStyle(color: Colors.white),
-//           ),
-//         const SizedBox(height: 8),
-//       ],
-//     );
-//   }
+  _name() async{
+    final firebaseUser = await FirebaseAuth.instance.currentUser!;
+    if(firebaseUser !=null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get()
+          .then((ds) {
+        Name = ds.data()!['user'];
+        print(Name);
+      }).catchError((e){
+        print(e);
+      });
+    }
+  }
 }

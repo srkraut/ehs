@@ -68,7 +68,7 @@ class _ExpensesState extends State<Expenses> {
 
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (BuildContext context) => const HomePage()),
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()),
         (route) => false);
   }
 
@@ -125,7 +125,7 @@ class _ExpensesState extends State<Expenses> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer: const Drawer(
+        drawer:  Drawer(
           backgroundColor: Colors.grey,
           child: AccountPage(),
         ),

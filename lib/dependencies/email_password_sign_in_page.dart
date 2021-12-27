@@ -15,6 +15,7 @@ class EmailPasswordSignInPage extends StatefulWidget {
     );
   }
 
+
   @override
   _EmailPasswordSignInPageState createState() =>
       _EmailPasswordSignInPageState();
@@ -52,6 +53,27 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
       exception: exception,
     );
   }
+  final firestoreInstance = FirebaseFirestore.instance;
+  var firebaseUser = FirebaseAuth.instance.currentUser;
+  Future<void> userSetup(String name ) async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(auth.currentUser?.uid)
+        .set({'user': name});
+    // CollectionReference users = FirebaseFirestore.instance.collection("users");
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // String? uid = auth.currentUser?.uid;
+    // users.add({
+    //   "user": name,
+    //   "uid": uid,
+    //
+    // });
+    // return;
+  }
+
+
+
 
   Future<void> _submit() async {
     try {
@@ -73,6 +95,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
     } catch (e) {
       _showSignInError(model, e);
     }
+    userSetup(_nameController.text);
   }
 
   void _nameEditingComplete() {
@@ -101,6 +124,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
     _emailController.clear();
     _passwordController.clear();
   }
+
 
   Widget _buildNameField() {
     return TextFormField(
@@ -184,14 +208,17 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
               text: model.primaryButtonText,
               loading: model.isLoading,
               onPressed: model.isLoading ? null : _submit,
+
+
             ),
             const SizedBox(height: 6.0),
             FlatButton(
-              key: const Key('secondary-button'),
-              child: Text(model.secondaryButtonText),
-              onPressed: model.isLoading
-                  ? null
-                  : () => _updateFormType(model.secondaryActionFormType),
+                key: const Key('secondary-button'),
+                child: Text(model.secondaryButtonText),
+                onPressed: model.isLoading
+                    ? null
+                    : () => _updateFormType(model.secondaryActionFormType),
+                color: Colors.white,
             ),
             if (model.formType == EmailPasswordSignInFormType.signIn)
               FlatButton(
@@ -201,7 +228,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
                 onPressed: model.isLoading
                     ? null
                     : () => _updateFormType(
-                        EmailPasswordSignInFormType.forgotPassword),
+                    EmailPasswordSignInFormType.forgotPassword),
               ),
           ],
         ),

@@ -46,7 +46,7 @@ class MyApp extends ConsumerWidget {
                 : const OnboardingPage();
           },
         ),
-        signedInBuilder: (_) => const HomePage(),
+        signedInBuilder: (_) =>  HomePage(),
       ),
       onGenerateRoute: (settings) =>
           AppRouter.onGenerateRoute(settings, firebaseAuth),

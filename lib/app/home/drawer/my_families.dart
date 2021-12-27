@@ -14,7 +14,7 @@ class MyFamilies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const Drawer(
+      drawer: Drawer(
         backgroundColor: Colors.grey,
         child: AccountPage(),
       ),
