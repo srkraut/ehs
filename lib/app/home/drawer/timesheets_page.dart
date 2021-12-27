@@ -10,6 +10,7 @@ import 'package:time_picker_sheet/widget/sheet.dart';
 import 'package:time_picker_sheet/widget/time_picker.dart';
 import 'package:tuple/tuple.dart';
 
+import '../home_page.dart';
 import 'account_page.dart';
 
 class TimeSheet extends StatefulWidget {
@@ -66,6 +67,16 @@ class _TimeSheetState extends State<TimeSheet> {
         .doc(firebaseUser!.uid)
         .collection("Timesheet")
         .add(submitmap);
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Form Submitted"),
+      duration: Duration(milliseconds: 500),
+    ));
+
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()),
+            (route) => false);
   }
 
   //For project 1 Time picker Function

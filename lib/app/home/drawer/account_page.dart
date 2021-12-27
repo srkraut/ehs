@@ -81,13 +81,6 @@ class AccountPage extends ConsumerWidget {
                       ),);
                   },
                 ),
-                // Text(
-                //   Name.substring(0, 1),
-                //   style: TextStyle(
-                //     color: Colors.white,
-                //     fontSize: height * 0.04,
-                //   ),
-                // ),
                 backgroundColor: Colors.red.shade400,
               ),
               Padding(

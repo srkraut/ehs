@@ -27,5 +27,7 @@ class EmailPasswordSignInStrings {
   static const String invalidEmailErrorText = 'Email is invalid';
   static const String invalidEmailEmpty = 'Email can\'t be empty';
   static const String invalidPasswordTooShort = 'Password is too short';
+  static const String invalidNameTooShort = 'Name is too short';
   static const String invalidPasswordEmpty = 'Password can\'t be empty';
+  static const String invalidNameEmpty = 'Name can\'t be empty';
 }

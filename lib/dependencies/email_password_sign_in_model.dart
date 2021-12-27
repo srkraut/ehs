@@ -11,6 +11,8 @@ class EmailAndPasswordValidators {
       MinLengthStringValidator(8);
   final StringValidator passwordSignInSubmitValidator =
       NonEmptyStringValidator();
+  final StringValidator nameSignInSubmitValidator =
+  NonEmptyStringValidator();
 }
 
 class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
@@ -172,6 +174,13 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
     }
     return passwordSignInSubmitValidator.isValid(password);
   }
+  bool get canSubmitName {
+    if (formType == EmailPasswordSignInFormType.register) {
+    }
+    return nameSignInSubmitValidator.isValid(name);
+  }
+
+
 
   bool get canSubmit {
     final bool canSubmitFields =
@@ -195,6 +204,14 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
         ? EmailPasswordSignInStrings.invalidPasswordEmpty
         : EmailPasswordSignInStrings.invalidPasswordTooShort;
     return showErrorText ? errorText : null;
+  }
+  String? get nameErrorText{
+    final bool showErrorText = submitted && !canSubmitName;
+    final String errorText = name.isEmpty
+        ? EmailPasswordSignInStrings.invalidNameEmpty
+        : EmailPasswordSignInStrings.invalidNameTooShort;
+    return showErrorText ? errorText : null;
+
   }
 
   @override

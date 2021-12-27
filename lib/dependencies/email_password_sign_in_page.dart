@@ -133,6 +133,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
       decoration: InputDecoration(
         labelText: EmailPasswordSignInStrings.nameLabel,
         hintText: EmailPasswordSignInStrings.nameHint,
+        errorText: model.nameErrorText,
         enabled: !model.isLoading,
       ),
       autocorrect: false,
