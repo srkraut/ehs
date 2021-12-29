@@ -72,10 +72,11 @@ class AccountPage extends ConsumerWidget {
                 child:FutureBuilder(
                   future: _name(),
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState != ConnectionState.done)
-                      return CircularProgressIndicator();
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return const CircularProgressIndicator();
+                    }
                     return
-                      Text("$Name".substring(0,1),style: TextStyle(
+                      Text(Name.substring(0,1),style: TextStyle(
                         color: Colors.white,
                         fontSize: height * 0.04,
                       ),);
@@ -88,9 +89,10 @@ class AccountPage extends ConsumerWidget {
                 child: FutureBuilder(
                   future: _name(),
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState != ConnectionState.done)
-                      return CircularProgressIndicator();
-                    return Text("$Name");
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return const CircularProgressIndicator();
+                    }
+                    return Text(Name);
                   },
                 ),
               ),

@@ -540,6 +540,7 @@ class _TimeSheetState extends State<TimeSheet> {
                                                             newTask.minute
                                                                 .toString()));
                                                 Navigator.of(context).pop();
+                                                _controller.clear();
                                               }),
                                           child: Text('Click')))
                                 ]),

@@ -70,7 +70,7 @@ class AppRouter {
         );
       case AppRoutes.familiesPage:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => const MyFamilies(),
+          builder: (_) => MyFamilies(),
           settings: settings,
           fullscreenDialog: true,
         );
