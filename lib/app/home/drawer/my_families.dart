@@ -22,6 +22,7 @@ class MyFamilies extends StatefulWidget {
 
 class _MyFamiliesState extends State<MyFamilies> {
   List<dynamic> familyList = [];
+  List<dynamic> familydetailList = [];
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -49,13 +50,18 @@ class _MyFamiliesState extends State<MyFamilies> {
         .doc(currentUserUID)
         .get();
 
-    familyList = value.data()!["Family"];
-  }
-
-  Future<Widget> getFamilydetails(String uid) async {
-    final value =
-        await FirebaseFirestore.instance.collection("Families").doc(uid).get();
-    return Text(value.data()!["Case_no"].toString());
+    familyList = value.data()!["families"];
+    if (familyList.length > 0) {
+      for (var i = 0; i < familyList.length; i++) {
+        DocumentReference docRef = FirebaseFirestore.instance
+            .doc("Families/" + familyList[i].toString());
+        docRef.get().then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            print(documentSnapshot.get('Case_no'));
+          }
+        });
+      }
+    }
   }
 
   // Future<List<String>> getGroupMembers() async {
