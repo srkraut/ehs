@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ehs/app/home/jobs/empty_content.dart';
 import 'package:ehs/app/top_level_providers.dart';
 
 class AuthWidget extends ConsumerWidget {
@@ -23,12 +22,7 @@ class AuthWidget extends ConsumerWidget {
           child: CircularProgressIndicator(),
         ),
       ),
-      error: (_, __) => const Scaffold(
-        body: EmptyContent(
-          title: 'Something went wrong',
-          message: 'Can\'t load data right now.',
-        ),
-      ),
+      error: (_, __) => const Scaffold(),
     );
   }
 

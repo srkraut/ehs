@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,7 +47,8 @@ class AccountPage extends ConsumerWidget {
       await _signOut(context, firebaseAuth);
     }
   }
-  late String Name;
+
+  late String name;
 
   Widget buildListTile(IconData? icon, String? title, Function()? onTap) {
     return ListTile(
@@ -59,7 +62,7 @@ class AccountPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
-    final user = firebaseAuth.currentUser!;
+    //final user = firebaseAuth.currentUser!;
     var height = MediaQuery.of(context).size.height;
 
     return ListView(
@@ -69,17 +72,19 @@ class AccountPage extends ConsumerWidget {
             children: [
               CircleAvatar(
                 radius: height * 0.06,
-                child:FutureBuilder(
+                child: FutureBuilder(
                   future: _name(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState != ConnectionState.done) {
                       return const CircularProgressIndicator();
                     }
-                    return
-                      Text(Name.substring(0,1),style: TextStyle(
+                    return Text(
+                      name.substring(0, 1),
+                      style: TextStyle(
                         color: Colors.white,
                         fontSize: height * 0.04,
-                      ),);
+                      ),
+                    );
                   },
                 ),
                 backgroundColor: Colors.red.shade400,
@@ -92,7 +97,7 @@ class AccountPage extends ConsumerWidget {
                     if (snapshot.connectionState != ConnectionState.done) {
                       return const CircularProgressIndicator();
                     }
-                    return Text(Name);
+                    return Text(name);
                   },
                 ),
               ),
@@ -114,7 +119,9 @@ class AccountPage extends ConsumerWidget {
           () => Expenses.show(context),
         ),
         buildListTile(
-            Icons.schedule, 'Timesheet', () => TimeSheet.show(context),
+          Icons.schedule,
+          'Timesheet',
+          () => TimeSheet.show(context),
         ),
         const Divider(
           height: 5,
@@ -140,19 +147,16 @@ class AccountPage extends ConsumerWidget {
       ],
     );
   }
-  _name() async{
-    final firebaseUser = await FirebaseAuth.instance.currentUser!;
-    if(firebaseUser !=null) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(firebaseUser.uid)
-          .get()
-          .then((ds) {
-        Name = ds.data()!['user'];
-        print(Name);
-      }).catchError((e){
-        print(e);
-      });
-    }
+
+  _name() async {
+    final firebaseUser = FirebaseAuth.instance.currentUser!;
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseUser.uid)
+        .get()
+        .then((ds) {
+      name = ds.data()!['user'];
+    });
   }
 }

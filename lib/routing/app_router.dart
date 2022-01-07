@@ -1,5 +1,5 @@
-
 import 'package:ehs/app/home/drawer/expenses_page.dart';
+import 'package:ehs/app/home/drawer/family_details.dart';
 import 'package:ehs/app/home/drawer/my_families.dart';
 import 'package:ehs/app/home/drawer/survey_page.dart';
 import 'package:ehs/app/home/home_page.dart';
@@ -21,6 +21,7 @@ class AppRoutes {
   static const timesheets = '/timesheet-page';
   static const surveyPage = '/survey-page';
   static const homePage = '/home-page';
+  static const familiyDetailsPage = '/family-details-page';
 }
 
 class AppRouter {
@@ -52,7 +53,7 @@ class AppRouter {
         );
       case AppRoutes.surveyPage:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => Survey(),
+          builder: (_) => const Survey(),
           settings: settings,
           fullscreenDialog: true,
         );
@@ -70,7 +71,7 @@ class AppRouter {
         );
       case AppRoutes.familiesPage:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => MyFamilies(),
+          builder: (_) => const MyFamilies(),
           settings: settings,
           fullscreenDialog: true,
         );
@@ -80,8 +81,13 @@ class AppRouter {
           settings: settings,
           fullscreenDialog: true,
         );
+      case AppRoutes.familiyDetailsPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => FamilyDetails(),
+          settings: settings,
+          fullscreenDialog: true,
+        );
       default:
-        // TODO: Throw
         return null;
     }
   }

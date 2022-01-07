@@ -1,10 +1,10 @@
+// ignore_for_file: empty_catches
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ehs/app/home/jobs/list_items_builder.dart';
+import 'package:ehs/app/home/drawer/family_details.dart';
 import 'package:ehs/routing/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'account_page.dart';
 
 class MyFamilies extends StatefulWidget {
@@ -22,9 +22,9 @@ class MyFamilies extends StatefulWidget {
 
 class _MyFamiliesState extends State<MyFamilies> {
   List<dynamic> familyList = [];
+  List<dynamic> familydetailList = [];
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   FirebaseAuth auth = FirebaseAuth.instance;
   @override
   void initState() {
@@ -44,63 +44,83 @@ class _MyFamiliesState extends State<MyFamilies> {
   }
 
   void getFamily() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUserUID)
+        .get();
+
+    setState(() {});
+  }
+
+  Future<List> getFamilyDetails() async {
     final value = await FirebaseFirestore.instance
         .collection("users")
         .doc(currentUserUID)
         .get();
 
-    familyList = value.data()!["Family"];
-  }
+    try {
+      familyList = value.data()!["families"];
+    } catch (e) {}
 
-  Future<Widget> getFamilydetails(String uid) async {
-    final value =
-        await FirebaseFirestore.instance.collection("Families").doc(uid).get();
-    return Text(value.data()!["Case_no"].toString());
+    if (familyList.isNotEmpty) {
+      for (var i = 0; i < familyList.length; i++) {
+        DocumentReference docRef = FirebaseFirestore.instance
+            .doc("Families/" + familyList[i].toString());
+        docRef.get().then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            familydetailList.add({
+              "familyID": familyList[i],
+              "case": documentSnapshot.get('Case_no'),
+              "name": documentSnapshot.get('Surname'),
+              "phone": documentSnapshot.get('phone'),
+              "email": documentSnapshot.get('email'),
+            });
+          }
+        });
+      }
+    }
+    return familydetailList;
   }
-
-  // Future<List<String>> getGroupMembers() async {
-  //   final String? uid = auth.currentUser?.uid;
-  //   final currentUser = [];
-  //   final groups = [];
-  //   // Get User document
-  //   await firestore
-  //       .collection('Families')
-  //       .doc(uid)
-  //       .get()
-  //       .then((DocumentSnapshot snapshot) {
-  //     currentUser.add(snapshot.data);
-  //   });
-  //   // Get groupeId from currentUser Data
-  //   final groupId = currentUser[0]['groupId'];
-  //
-  //   // Get groupe Document
-  //   await firestore
-  //       .collection('users')
-  //       .doc(groupId)
-  //       .get()
-  //       .then((DocumentSnapshot snapshot) {
-  //     groups.add(snapshot.data);
-  //   });
-  //
-  //   return groups[0]['Family'];
-  //
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(
-          backgroundColor: Colors.grey,
-          child: AccountPage(),
-        ),
-        appBar: AppBar(
-          title: const Text('My Families'),
-        ),
-        body: ListView.builder(
-            itemCount: familyList.length,
-            itemBuilder: (BuildContext ctxt, int index) {
-              return Text(familyList[index].toString());
-              //  return Text(getFamilydetails("$familyList").toString());
-            }));
+      drawer: Drawer(
+        backgroundColor: Colors.grey,
+        child: AccountPage(),
+      ),
+      appBar: AppBar(
+        title: const Text('My Families'),
+      ),
+      body: FutureBuilder(
+          future: getFamilyDetails(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return InkWell(
+                    onTap: () => Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => FamilyDetails(
+                            familyDetails: snapshot.data[index],
+                          ),
+                        ),
+                        (Route<dynamic> route) => false),
+                    child: Card(
+                      child: ListTile(
+                        title: Text(snapshot.data[index]["name"]),
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
+    );
   }
 }

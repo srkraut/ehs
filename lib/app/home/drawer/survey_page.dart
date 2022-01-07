@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehs/constants/keys.dart';
 import 'package:ehs/routing/app_router.dart';
@@ -9,11 +11,11 @@ import '../home_page.dart';
 import 'account_page.dart';
 
 class Survey extends StatefulWidget {
-  Survey({Key? key}) : super(key: key);
+  const Survey({Key? key}) : super(key: key);
 
   static Future<void> show(
-      BuildContext context,
-      ) async {
+    BuildContext context,
+  ) async {
     await Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
         AppRoutes.surveyPage, (Route<dynamic> route) => false);
   }
@@ -143,12 +145,11 @@ class _SurveyState extends State<Survey> {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (BuildContext context) => HomePage()),
-            (route) => false);
+        (route) => false);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     nameController.dispose();
     volunteerController.dispose();
@@ -161,7 +162,7 @@ class _SurveyState extends State<Survey> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer:  Drawer(
+        drawer: Drawer(
           backgroundColor: Colors.grey,
           child: AccountPage(),
         ),
@@ -251,12 +252,12 @@ class _SurveyState extends State<Survey> {
                 const SizedBox(height: 8),
                 Column(
                   children: valuesQ4.map(
-                        (value) {
-                      final selected = selectedValueQ4 == value;
+                    (value) {
+                      selectedValueQ4 == value;
 
                       return RadioListTile<String>(
                         visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
+                            const VisualDensity(horizontal: 0, vertical: -4),
                         value: value,
                         groupValue: selectedValueQ4,
                         title: Text(
@@ -270,7 +271,7 @@ class _SurveyState extends State<Survey> {
                 ),
                 const SizedBox(height: 14),
                 const Text(
-                    '5. If you answered no to Question 4, please explain in more detail shy you have not contacted the family'),
+                    '5. If you answered no to Question 4, please explain in more detail why you have not contacted the family'),
                 const SizedBox(height: 14),
                 Container(
                   padding: const EdgeInsets.only(left: 10),
@@ -298,28 +299,28 @@ class _SurveyState extends State<Survey> {
                 const SizedBox(height: 6),
                 Column(
                     children: Q6.map((q) {
-                      return CheckboxListTile(
-                          visualDensity:
+                  return CheckboxListTile(
+                      visualDensity:
                           const VisualDensity(horizontal: 0, vertical: -4),
-                          value: q["label"],
-                          title: Text(q["value"]),
-                          onChanged: (newValue) {
-                            setState(() {
-                              q["label"] = newValue;
-                            });
-                          });
-                    }).toList()),
+                      value: q["label"],
+                      title: Text(q["value"]),
+                      onChanged: (newValue) {
+                        setState(() {
+                          q["label"] = newValue;
+                        });
+                      });
+                }).toList()),
                 const SizedBox(height: 14),
                 const Text('7. How many hours did you spend with the family?'),
                 const SizedBox(height: 6),
                 Column(
                   children: valuesQ7.map(
-                        (value) {
-                      final selected = selectedValueQ7 == value;
+                    (value) {
+                      selectedValueQ7 == value;
 
                       return RadioListTile<String>(
                         visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
+                            const VisualDensity(horizontal: 0, vertical: -4),
                         value: value,
                         groupValue: selectedValueQ7,
                         title: Text(
@@ -337,12 +338,12 @@ class _SurveyState extends State<Survey> {
                 const SizedBox(height: 6),
                 Column(
                   children: valuesQ8.map(
-                        (value) {
-                      final selected = selectedValueQ8 == value;
+                    (value) {
+                      selectedValueQ8 == value;
 
                       return RadioListTile<String>(
                         visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
+                            const VisualDensity(horizontal: 0, vertical: -4),
                         value: value,
                         groupValue: selectedValueQ8,
                         title: Text(
@@ -360,8 +361,8 @@ class _SurveyState extends State<Survey> {
                 const SizedBox(height: 6),
                 Column(
                   children: valuesQ9.map(
-                        (value) {
-                      final selected = selectedValueQ9 == value;
+                    (value) {
+                      selectedValueQ9 == value;
 
                       return RadioListTile<String>(
                         value: value,
@@ -381,29 +382,29 @@ class _SurveyState extends State<Survey> {
                 const SizedBox(height: 6),
                 Column(
                     children: Q10.map((q) {
-                      return CheckboxListTile(
-                          visualDensity:
+                  return CheckboxListTile(
+                      visualDensity:
                           const VisualDensity(horizontal: 0, vertical: -4),
-                          value: q["label"],
-                          title: Text(q["value"]),
-                          onChanged: (newValue) {
-                            setState(() {
-                              q["label"] = newValue;
-                            });
-                          });
-                    }).toList()),
+                      value: q["label"],
+                      title: Text(q["value"]),
+                      onChanged: (newValue) {
+                        setState(() {
+                          q["label"] = newValue;
+                        });
+                      });
+                }).toList()),
                 const SizedBox(height: 14),
                 const Text(
                     '11. Are you confident that the family are working towards the goals set out in you case plans?'),
                 const SizedBox(height: 6),
                 Column(
                   children: valuesQ11.map(
-                        (value) {
-                      final selected = selectedValueQ11 == value;
+                    (value) {
+                      selectedValueQ11 == value;
 
                       return RadioListTile<String>(
                         visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
+                            const VisualDensity(horizontal: 0, vertical: -4),
                         value: value,
                         groupValue: selectedValueQ11,
                         title: Text(
@@ -445,12 +446,12 @@ class _SurveyState extends State<Survey> {
                 const SizedBox(height: 6),
                 Column(
                   children: valuesQ13.map(
-                        (value) {
-                      final selected = selectedValueQ8 == value;
+                    (value) {
+                      selectedValueQ8 == value;
 
                       return RadioListTile<String>(
                         visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
+                            const VisualDensity(horizontal: 0, vertical: -4),
                         value: value,
                         groupValue: selectedValueQ13,
                         title: Text(
@@ -492,12 +493,12 @@ class _SurveyState extends State<Survey> {
                 const SizedBox(height: 6),
                 Column(
                   children: valuesQ15.map(
-                        (value) {
-                      final selected = selectedValueQ15 == value;
+                    (value) {
+                      selectedValueQ15 == value;
 
                       return RadioListTile<String>(
                         visualDensity:
-                        const VisualDensity(horizontal: 0, vertical: -4),
+                            const VisualDensity(horizontal: 0, vertical: -4),
                         value: value,
                         groupValue: selectedValueQ15,
                         title: Text(

@@ -54,6 +54,7 @@ dependencies:
   shared_preferences: ^2.0.6
   state_notifier: ^0.7.0
   time_picker_sheet: ^0.0.2+1
+  url_launcher: ^6.0.17
 dev_dependencies:
   flutter_driver:
     sdk: flutter

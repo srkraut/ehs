@@ -15,6 +15,8 @@ final signInModelProvider = ChangeNotifierProvider<SignInViewModel>(
 );
 
 class SignInPage extends ConsumerWidget {
+  const SignInPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signInModel = ref.watch(signInModelProvider);

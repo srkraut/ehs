@@ -1,4 +1,3 @@
-import 'package:ehs/app/home/drawer/timesheets_page.dart';
 import 'package:ehs/constants/keys.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +6,6 @@ import 'package:ehs/app/home/home_page.dart';
 import 'package:ehs/app/onboarding/onboarding_page.dart';
 import 'package:ehs/app/onboarding/onboarding_view_model.dart';
 import 'package:ehs/app/top_level_providers.dart';
-import 'package:ehs/app/sign_in/sign_in_page.dart';
 import 'package:ehs/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,11 +23,13 @@ Future<void> main() async {
         SharedPreferencesService(sharedPreferences),
       ),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends ConsumerWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseAuth = ref.watch(firebaseAuthProvider);
@@ -46,7 +46,7 @@ class MyApp extends ConsumerWidget {
                 : const OnboardingPage();
           },
         ),
-        signedInBuilder: (_) =>  HomePage(),
+        signedInBuilder: (_) => HomePage(),
       ),
       onGenerateRoute: (settings) =>
           AppRouter.onGenerateRoute(settings, firebaseAuth),

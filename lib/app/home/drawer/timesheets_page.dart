@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehs/constants/keys.dart';
 import 'package:ehs/routing/app_router.dart';
@@ -28,7 +26,7 @@ class TimeSheet extends StatefulWidget {
 
 class _TimeSheetState extends State<TimeSheet> {
   List projhashMap = [];
-  Map<String, dynamic> submitmap =    <String, dynamic>{};
+  Map<String, dynamic> submitmap = <String, dynamic>{};
 
   //Connceting to the fire base
   DateTime dateTimeSelected = DateTime.now(); //for project 1
@@ -40,25 +38,43 @@ class _TimeSheetState extends State<TimeSheet> {
   DateTime currentDate = DateTime.now();
   DateTime newTask = DateTime.now(); //for date picker
 
-  String? selectedDate, ProjectTime, Acme, Vaccation, Office, Break;
+  String? selectedDate, projectTime, ccme, vaccation, office;
 
   final firestoreInstance = FirebaseFirestore.instance;
   var firebaseUser = FirebaseAuth.instance.currentUser;
 
   void _onSubmit() {
-    submitmap.putIfAbsent("Date", () => DateFormat('EEEEEE, M/d/y').format(currentDate).toString());
-    submitmap.putIfAbsent("Acme", () => '${acmeSelected.hour.toString()} : ${acmeSelected.minute.toString()}'.toString());
-    submitmap.putIfAbsent("ProjectTime", () => '${dateTimeSelected.hour.toString()} : ${dateTimeSelected.minute.toString()}');
-    submitmap.putIfAbsent("Vaccation", () => '${vaccationSelected.hour.toString()} : ${vaccationSelected.minute.toString()}');
-    submitmap.putIfAbsent("Office", () => '${officeSelected.hour.toString()} : ${officeSelected.minute.toString()}');
-    submitmap.putIfAbsent("Break", () => '${breakSelected.hour.toString()} : ${breakSelected.minute.toString()}');
+    submitmap.putIfAbsent("Date",
+        () => DateFormat('EEEEEE, M/d/y').format(currentDate).toString());
+    submitmap.putIfAbsent(
+        "Acme",
+        () =>
+            '${acmeSelected.hour.toString()} : ${acmeSelected.minute.toString()}'
+                .toString());
+    submitmap.putIfAbsent(
+        "ProjectTime",
+        () =>
+            '${dateTimeSelected.hour.toString()} : ${dateTimeSelected.minute.toString()}');
+    submitmap.putIfAbsent(
+        "Vaccation",
+        () =>
+            '${vaccationSelected.hour.toString()} : ${vaccationSelected.minute.toString()}');
+    submitmap.putIfAbsent(
+        "Office",
+        () =>
+            '${officeSelected.hour.toString()} : ${officeSelected.minute.toString()}');
+    submitmap.putIfAbsent(
+        "Break",
+        () =>
+            '${breakSelected.hour.toString()} : ${breakSelected.minute.toString()}');
 
-   if(projhashMap.length>0){
-     for(int i=0 ; i<projhashMap.length ; i++){
-       Tuple2 temp = projhashMap[i];
-       submitmap.putIfAbsent(temp.item1.toString(), () => temp.item2.toString());
-     }
-   }
+    if (projhashMap.isNotEmpty) {
+      for (int i = 0; i < projhashMap.length; i++) {
+        Tuple2 temp = projhashMap[i];
+        submitmap.putIfAbsent(
+            temp.item1.toString(), () => temp.item2.toString());
+      }
+    }
 
     // var encodedObject = json.encode(submitmap);
 
@@ -76,7 +92,7 @@ class _TimeSheetState extends State<TimeSheet> {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (BuildContext context) => HomePage()),
-            (route) => false);
+        (route) => false);
   }
 
   //For project 1 Time picker Function
@@ -284,7 +300,7 @@ class _TimeSheetState extends State<TimeSheet> {
         children: [
           const Text("Project 1"),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Container(
               height: MediaQuery.of(context).size.height * 0.06,
               decoration: BoxDecoration(
@@ -315,7 +331,7 @@ class _TimeSheetState extends State<TimeSheet> {
         children: [
           const Text("ACME"),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 60),
+            padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Container(
               height: MediaQuery.of(context).size.height * 0.06,
               decoration: BoxDecoration(
@@ -346,7 +362,7 @@ class _TimeSheetState extends State<TimeSheet> {
         children: [
           const Text("Vacation"),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Container(
               height: MediaQuery.of(context).size.height * 0.06,
               decoration: BoxDecoration(
@@ -377,7 +393,7 @@ class _TimeSheetState extends State<TimeSheet> {
         children: [
           const Text("Office"),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 60),
+            padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Container(
               height: MediaQuery.of(context).size.height * 0.06,
               decoration: BoxDecoration(
@@ -406,9 +422,9 @@ class _TimeSheetState extends State<TimeSheet> {
       ),
       Row(
         children: [
-          Text("Break"),
+          const Text("Break"),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 60),
+            padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Container(
               height: MediaQuery.of(context).size.height * 0.06,
               decoration: BoxDecoration(
@@ -433,9 +449,9 @@ class _TimeSheetState extends State<TimeSheet> {
         ],
       ),
       const SizedBox(height: 14),
-      projhashMap.length > 0
+      projhashMap.isNotEmpty
           ? ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: projhashMap.length,
               itemBuilder: (BuildContext context, int index) {
@@ -446,7 +462,7 @@ class _TimeSheetState extends State<TimeSheet> {
                     children: [
                       Text(temp.item1.toString()),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 60),
+                        padding: const EdgeInsets.symmetric(horizontal: 60),
                         child: Container(
                           height: MediaQuery.of(context).size.height * 0.06,
                           decoration: BoxDecoration(
@@ -499,7 +515,7 @@ class _TimeSheetState extends State<TimeSheet> {
                         return AlertDialog(
                           content: StatefulBuilder(
                               builder: (context, StateSetter setState) {
-                            return Container(
+                            return SizedBox(
                               height: 150,
                               child: Scaffold(
                                 body: Column(children: [
@@ -542,7 +558,7 @@ class _TimeSheetState extends State<TimeSheet> {
                                                 Navigator.of(context).pop();
                                                 _controller.clear();
                                               }),
-                                          child: Text('Click')))
+                                          child: const Text('Click')))
                                 ]),
                               ),
                             );

@@ -111,7 +111,6 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     travel.dispose();
     distanceT.dispose();
@@ -125,7 +124,7 @@ class _ExpensesState extends State<Expenses> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer:  Drawer(
+        drawer: Drawer(
           backgroundColor: Colors.grey,
           child: AccountPage(),
         ),

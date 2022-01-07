@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:ehs/app/home/job_entries/format.dart';
 import 'package:ehs/app/home/models/entry.dart';

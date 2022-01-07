@@ -1,12 +1,9 @@
+// ignore_for_file: must_be_immutable, non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ehs/constants/keys.dart';
 import 'package:ehs/routing/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ehs/app/home/cupertino_home_scaffold.dart';
-import 'package:ehs/app/home/entries/entries_page.dart';
-import 'package:ehs/app/home/jobs/jobs_page.dart';
-import 'package:ehs/app/home/tab_item.dart';
 import 'drawer/account_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,12 +24,68 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late String MyName;
-
-
+  String? currentUser;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  List<dynamic> familyList = [];
+  List<dynamic> familydetailList = [];
+  List<dynamic> _notes = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _fetch();
+    getCurrentUser();
+    // getFamilyDetails();
+  }
 
+  String? currentUserUID;
+  void getCurrentUser() {
+    currentUserUID = auth.currentUser?.uid;
+  }
+
+  Future<List> getFamilyDetails() async {
+    final value = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUserUID)
+        .get();
+
+    try {
+      familyList = value.data()!["families"];
+    } catch (e) {}
+
+    if (familyList.isNotEmpty) {
+      for (var i = 0; i < familyList.length; i++) {
+        DocumentReference docRef = FirebaseFirestore.instance
+            .doc("Families/" + familyList[i].toString());
+        docRef.get().then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            familydetailList.add({
+              "familyID": familyList[i],
+              "case": documentSnapshot.get('Case_no'),
+              "name": documentSnapshot.get('Surname'),
+            });
+          }
+        });
+      }
+    }
+
+    if (familydetailList.isNotEmpty) {
+      for (var j = 0; j < familydetailList.length; j++) {
+        final value = FirebaseFirestore.instance
+            .collection("users")
+            .doc(currentUserUID)
+            .collection('family-note')
+            .doc(familydetailList[j]['familyID'])
+            .collection('tasks')
+            .get();
+        _notes = await value
+            .then((value) => value.docs.map((e) => e.data()).toList());
+        return _notes;
+      }
+    }
+    return _notes;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +97,7 @@ class _HomePageState extends State<HomePage> {
           title: const Text('Home'),
           centerTitle: true,
         ),
-        drawer:  Drawer(
+        drawer: Drawer(
           backgroundColor: Colors.grey,
           child: AccountPage(),
         ),
@@ -63,14 +116,7 @@ class _HomePageState extends State<HomePage> {
                   width: 200,
                   fit: BoxFit.fitWidth,
                 ),
-                FutureBuilder(
-                  future: _fetch(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState != ConnectionState.done)
-                      return CircularProgressIndicator();
-                    return Text("Welcome $MyName");
-                  },
-                ),
+                Text("Welcome $currentUser"),
                 SizedBox(
                   height: height * 0.06,
                 ),
@@ -90,26 +136,44 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
+            FutureBuilder(
+                future: getFamilyDetails(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          elevation: 0,
+                          color: Colors.grey[200],
+                          child: ListTile(
+                            title: Text(snapshot.data[index]['task']),
+                            trailing: Text(snapshot.data[index]['date']),
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
           ],
         ),
       ),
     );
   }
-  _fetch() async{
-    final firebaseUser = await FirebaseAuth.instance.currentUser!;
-    if(firebaseUser !=null) {
-      await FirebaseFirestore.instance
-        .collection('users')
-        .doc(firebaseUser.uid)
-        .get()
-        .then((ds) {
-      MyName = ds.data()!['user'];
-      print(MyName);
-    }).catchError((e){
-      print(e);
-      });
-    }
+
+  void _fetch() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+    final userData =
+        await firestore.collection('users').doc(firebaseUser!.uid).get();
+    setState(() {
+      currentUser = userData.data()!['user'];
+    });
   }
 }
-
-

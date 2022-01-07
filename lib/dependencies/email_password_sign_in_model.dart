@@ -1,4 +1,3 @@
-
 part of email_password_sign_in_ui;
 
 enum EmailPasswordSignInFormType { signIn, register, forgotPassword }
@@ -11,12 +10,10 @@ class EmailAndPasswordValidators {
       MinLengthStringValidator(8);
   final StringValidator passwordSignInSubmitValidator =
       NonEmptyStringValidator();
-  final StringValidator nameSignInSubmitValidator =
-  NonEmptyStringValidator();
+  final StringValidator nameSignInSubmitValidator = NonEmptyStringValidator();
 }
 
 class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
-
   EmailPasswordSignInModel({
     required this.firebaseAuth,
     this.name = '',
@@ -27,11 +24,6 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
     this.submitted = false,
   });
   final FirebaseAuth firebaseAuth;
-
-  // FirebaseFirestore.instance
-  //         .collection('users')
-  //         .doc(authResult.user.uid)
-  //         .set({'user': user, 'email': email});
 
   String name;
   String email;
@@ -53,13 +45,10 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
               EmailAuthProvider.credential(email: email, password: password));
           break;
         case EmailPasswordSignInFormType.register:
-          await firebaseAuth
-              .createUserWithEmailAndPassword(email: email, password: password,);
-              // .then((_) =>
-          // FirebaseFirestore.instance
-          //         .collection("users")
-          //         .doc(firebaseAuth.currentUser?.uid)
-          //         .set({'user': name}));
+          await firebaseAuth.createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
           break;
         case EmailPasswordSignInFormType.forgotPassword:
           await firebaseAuth.sendPasswordResetEmail(email: email);
@@ -76,7 +65,7 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
   void updateEmail(String email) => updateWith(email: email);
 
   void updatePassword(String password) => updateWith(password: password);
-   void updateName(String name) => updateWith(name: name);
+  void updateName(String name) => updateWith(name: name);
 
   void updateFormType(EmailPasswordSignInFormType formType) {
     updateWith(
@@ -97,7 +86,7 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
     bool? isLoading,
     bool? submitted,
   }) {
-    this.name = name?? this.name;
+    this.name = name ?? this.name;
     this.email = email ?? this.email;
     this.password = password ?? this.password;
     this.formType = formType ?? this.formType;
@@ -174,13 +163,11 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
     }
     return passwordSignInSubmitValidator.isValid(password);
   }
+
   bool get canSubmitName {
-    if (formType == EmailPasswordSignInFormType.register) {
-    }
+    if (formType == EmailPasswordSignInFormType.register) {}
     return nameSignInSubmitValidator.isValid(name);
   }
-
-
 
   bool get canSubmit {
     final bool canSubmitFields =
@@ -205,13 +192,13 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
         : EmailPasswordSignInStrings.invalidPasswordTooShort;
     return showErrorText ? errorText : null;
   }
-  String? get nameErrorText{
+
+  String? get nameErrorText {
     final bool showErrorText = submitted && !canSubmitName;
     final String errorText = name.isEmpty
         ? EmailPasswordSignInStrings.invalidNameEmpty
         : EmailPasswordSignInStrings.invalidNameTooShort;
     return showErrorText ? errorText : null;
-
   }
 
   @override
