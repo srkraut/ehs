@@ -101,67 +101,82 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.grey,
           child: AccountPage(),
         ),
-        body: Column(
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: height * 0.06,
-                ),
-                Image.asset(
-                  'assets/ESP-Logo_draft4.png',
-                  height: 100,
-                  width: 200,
-                  fit: BoxFit.fitWidth,
-                ),
-                Text("Welcome $currentUser"),
-                SizedBox(
-                  height: height * 0.06,
-                ),
-              ],
-            ),
-            Row(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(left: 18.0),
-                  child: Text(
-                    'Upcoming Tasks',
-                    style: TextStyle(decoration: TextDecoration.underline),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: height * 0.06,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            FutureBuilder(
-                future: getFamilyDetails(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          elevation: 0,
-                          color: Colors.grey[200],
-                          child: ListTile(
-                            title: Text(snapshot.data[index]['task']),
-                            trailing: Text(snapshot.data[index]['date']),
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                }),
-          ],
+                  Image.asset(
+                    'assets/ESP-Logo_draft4.png',
+                    height: 100,
+                    width: 200,
+                    fit: BoxFit.fitWidth,
+                  ),
+                  Text("Welcome $currentUser"),
+                  SizedBox(
+                    height: height * 0.06,
+                  ),
+                ],
+              ),
+              Row(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(left: 18.0),
+                    child: Text(
+                      'Upcoming Tasks',
+                      style: TextStyle(decoration: TextDecoration.underline),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              FutureBuilder(
+                  future: getFamilyDetails(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            elevation: 0,
+                            color: Colors.grey[200],
+                            child: ListTile(
+                              title: Text(snapshot.data[index]['task']),
+                              trailing: Text(snapshot.data[index]['date']),
+                              // trailing: IconButton(
+                              //     onPressed: () async {
+                              //       // await FirebaseFirestore.instance
+                              //       //     .collection("users")
+                              //       //     .doc(currentUserUID)
+                              //       //     .collection('family-note')
+                              //       //     .doc(snapshot.data[index]['familyID'])
+                              //       //     .collection('notes')
+                              //       //     .doc(snapshot.data[index]['id'])
+                              //       //     .delete();
+                              //       // setState(() {});
+                              //     },
+                              //     icon: const Icon(Icons.delete)),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
+            ],
+          ),
         ),
       ),
     );

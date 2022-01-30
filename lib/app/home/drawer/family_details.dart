@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehs/app/home/drawer/account_page.dart';
+import 'package:ehs/app/home/drawer/my_families.dart';
 import 'package:ehs/app/home/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -205,6 +206,7 @@ class _FamilyDetailsState extends State<FamilyDetails> {
                   maxLines: null,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
+                    hintText: 'Enter Task',
                   ),
                 ),
               ),
@@ -247,7 +249,6 @@ class _FamilyDetailsState extends State<FamilyDetails> {
                 leading: const Icon(Icons.chat),
                 title: const Text('Text'),
               ),
-
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: _notes.length,
@@ -256,11 +257,36 @@ class _FamilyDetailsState extends State<FamilyDetails> {
                   color: Colors.grey[200],
                   child: ListTile(
                     title: Text(_notes[index]['note']),
+                    trailing: IconButton(
+                        onPressed: () async {
+                          final _docRef = await FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(firebaseUser?.uid)
+                              .collection('family-note')
+                              .doc(widget.familyDetails['familyID'])
+                              .collection('notes')
+                              .get();
+
+                          await FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(firebaseUser!.uid)
+                              .collection('family-note')
+                              .doc(widget.familyDetails['familyID'])
+                              .collection('notes')
+                              .doc(_docRef.docs[index].id)
+                              .delete()
+                              .then((_) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const MyFamilies()),
+                                (route) => false);
+                          });
+                        },
+                        icon: const Icon(Icons.delete)),
                   ),
                 ),
               ),
-
-              // ),
             ],
           ),
         ),

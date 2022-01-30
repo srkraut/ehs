@@ -1,7 +1,12 @@
 import 'package:ehs/app/home/drawer/expenses_page.dart';
 import 'package:ehs/app/home/drawer/family_details.dart';
+import 'package:ehs/app/home/drawer/feedback_page.dart';
 import 'package:ehs/app/home/drawer/my_families.dart';
+import 'package:ehs/app/home/drawer/privacy_policy_page.dart';
+import 'package:ehs/app/home/drawer/support_page.dart';
 import 'package:ehs/app/home/drawer/survey_page.dart';
+import 'package:ehs/app/home/drawer/terms_condition_page.dart';
+import 'package:ehs/app/home/drawer/training_resource_page.dart';
 import 'package:ehs/app/home/home_page.dart';
 import 'package:ehs/dependencies/email_password_sign_in_ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +27,11 @@ class AppRoutes {
   static const surveyPage = '/survey-page';
   static const homePage = '/home-page';
   static const familiyDetailsPage = '/family-details-page';
+  static const termsAndConditions = '/terms-and-conditions';
+  static const privacyPolicy = '/privacy-policy';
+  static const feedback = '/feedback';
+  static const support = '/support';
+  static const training = '/training';
 }
 
 class AppRouter {
@@ -84,6 +94,36 @@ class AppRouter {
       case AppRoutes.familiyDetailsPage:
         return MaterialPageRoute<dynamic>(
           builder: (_) => FamilyDetails(),
+          settings: settings,
+          fullscreenDialog: true,
+        );
+      case AppRoutes.termsAndConditions:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const TermsAndConditions(),
+          settings: settings,
+          fullscreenDialog: true,
+        );
+      case AppRoutes.privacyPolicy:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const PrivacyPolicy(),
+          settings: settings,
+          fullscreenDialog: true,
+        );
+      case AppRoutes.feedback:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => FeedbackPage(),
+          settings: settings,
+          fullscreenDialog: true,
+        );
+      case AppRoutes.support:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const SupportPage(),
+          settings: settings,
+          fullscreenDialog: true,
+        );
+      case AppRoutes.training:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => TrainingResource(),
           settings: settings,
           fullscreenDialog: true,
         );

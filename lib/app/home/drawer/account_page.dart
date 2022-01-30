@@ -3,8 +3,13 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ehs/app/home/drawer/feedback_page.dart';
 import 'package:ehs/app/home/drawer/my_families.dart';
+import 'package:ehs/app/home/drawer/privacy_policy_page.dart';
+import 'package:ehs/app/home/drawer/support_page.dart';
 import 'package:ehs/app/home/drawer/survey_page.dart';
+import 'package:ehs/app/home/drawer/terms_condition_page.dart';
+import 'package:ehs/app/home/drawer/training_resource_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ehs/app/top_level_providers.dart';
@@ -123,17 +128,19 @@ class AccountPage extends ConsumerWidget {
           'Timesheet',
           () => TimeSheet.show(context),
         ),
+        buildListTile(Icons.model_training, 'Training resources',
+            () => TrainingResource.show(context)),
         const Divider(
           height: 5,
           color: Colors.black,
         ),
         buildListTile(Icons.description, 'Terms and Condtion',
-            () => Navigator.pop(context)),
+            () => TermsAndConditions.show(context)),
+        buildListTile(Icons.privacy_tip, 'Privacy Policy',
+            () => PrivacyPolicy.show(context)),
         buildListTile(
-            Icons.privacy_tip, 'Privacy Policy', () => Navigator.pop(context)),
-        buildListTile(
-            Icons.chat_bubble, 'Feedback', () => Navigator.pop(context)),
-        buildListTile(Icons.info, 'Support', () => Navigator.pop(context)),
+            Icons.chat_bubble, 'Feedback', () => FeedbackPage.show(context)),
+        buildListTile(Icons.info, 'Support', () => SupportPage.show(context)),
         buildListTile(
           Icons.poll,
           'Survey',
